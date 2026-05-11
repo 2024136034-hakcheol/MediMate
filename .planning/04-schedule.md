@@ -20,7 +20,7 @@
 - [x] `.planning/04-schedule.md` 작성
 - [x] `BONUS.md` 초안 작성
 - [x] `.planning/decisions/ADR-0001-mobile-framework.md` 작성
-- [ ] GitHub 리포지토리 생성 및 push
+- [x] GitHub 리포지토리 생성 및 push
 
 ### 11주차 — 설계·환경 구축
 - [x] Flutter SDK 설치 및 프로젝트 초기화
