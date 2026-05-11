@@ -23,11 +23,11 @@
 - [ ] GitHub 리포지토리 생성 및 push
 
 ### 11주차 — 설계·환경 구축
-- [ ] Flutter SDK 설치 및 프로젝트 초기화
-- [ ] `docs/ARCHITECTURE.md` 확정
+- [x] Flutter SDK 설치 및 프로젝트 초기화
+- [x] `docs/ARCHITECTURE.md` 확정
 - [ ] Gemini API 키 발급 및 연동 테스트
 - [ ] sqflite 초기화 코드 작성
-- [ ] "Hello World" 앱 빌드 및 실행 확인
+- [x] "Hello World" 앱 빌드 및 실행 확인
 
 ### 12주차 — 핵심 기능 1 + 중간발표
 - [ ] 카메라/갤러리 이미지 선택 화면 (F-01)
