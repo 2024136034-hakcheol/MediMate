@@ -37,13 +37,21 @@
 MediMate/
 ├── lib/
 │   ├── main.dart
-│   ├── services/         # GeminiService, DbService
-│   └── models/           # Medicine, Schedule, IntakeLog
+│   ├── app.dart
+│   ├── presentation/
+│   │   ├── screens/      # UI 화면
+│   │   ├── widgets/      # 공통 위젯
+│   │   └── theme/        # 앱 테마
+│   ├── application/
+│   │   └── view_models/  # 상태 관리
+│   ├── domain/
+│   │   ├── entities/     # Medicine, Schedule, IntakeLog
+│   │   └── services/     # 비즈니스 로직
+│   └── data/
+│       ├── api/          # GeminiService
+│       ├── local/        # DbService (SQLite)
+│       └── repositories/
 ├── docs/
-│   ├── setup.md
-│   ├── PRD.md
-│   ├── WBS.md
-│   └── ARCHITECTURE.md
 ├── .planning/
 ├── .env                  # API 키 (gitignore)
 ├── AGENTS.md

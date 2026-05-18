@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/medicine.dart';
-import '../models/schedule.dart';
-import '../models/intake_log.dart';
+import '../../domain/entities/medicine.dart';
+import '../../domain/entities/schedule.dart';
+import '../../domain/entities/intake_log.dart';
 
 class DbService {
   static final DbService _instance = DbService._internal();
@@ -18,11 +18,7 @@ class DbService {
 
   Future<Database> _initDb() async {
     final path = join(await getDatabasesPath(), 'medimate.db');
-    return openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
+    return openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -35,7 +31,6 @@ class DbService {
         created_at TEXT NOT NULL
       )
     ''');
-
     await db.execute('''
       CREATE TABLE schedules (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +42,6 @@ class DbService {
         FOREIGN KEY (medicine_id) REFERENCES medicines(id)
       )
     ''');
-
     await db.execute('''
       CREATE TABLE intake_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,7 +53,6 @@ class DbService {
     ''');
   }
 
-  // Medicine CRUD
   Future<int> insertMedicine(Medicine medicine) async {
     final database = await db;
     return database.insert('medicines', medicine.toMap());
@@ -77,7 +70,6 @@ class DbService {
     await database.delete('schedules', where: 'medicine_id = ?', whereArgs: [id]);
   }
 
-  // Schedule CRUD
   Future<int> insertSchedule(Schedule schedule) async {
     final database = await db;
     return database.insert('schedules', schedule.toMap());
@@ -93,7 +85,6 @@ class DbService {
     return maps.map((m) => Schedule.fromMap(m)).toList();
   }
 
-  // IntakeLog CRUD
   Future<int> insertIntakeLog(IntakeLog log) async {
     final database = await db;
     return database.insert('intake_logs', log.toMap());

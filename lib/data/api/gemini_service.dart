@@ -44,7 +44,7 @@ class GeminiService {
 
   Future<MedicineInfo?> analyzeMedicineImage(File imageFile) async {
     final imageBytes = await imageFile.readAsBytes();
-    final prompt = '''
+    const prompt = '''
 당신은 약학 전문가입니다.
 첨부된 약 포장지 이미지를 분석하여 아래 JSON 형식으로 정보를 추출하세요.
 이미지에서 확인할 수 없는 항목은 null로 반환하세요.

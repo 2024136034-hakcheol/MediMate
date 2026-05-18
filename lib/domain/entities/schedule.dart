@@ -1,7 +1,7 @@
 class Schedule {
   final int? id;
   final int medicineId;
-  final String time; // "08:00"
+  final String time;
   final String startDate;
   final String? endDate;
   final bool isActive;
