@@ -25,6 +25,7 @@
 
 ## 문서
 
+- [설치 & 실행 가이드](docs/setup.md)
 - [기획서 & 요구사항](docs/PRD.md)
 - [WBS & 일정표](docs/WBS.md)
 - [아키텍처 & ADR](docs/ARCHITECTURE.md)
@@ -36,13 +37,17 @@
 MediMate/
 ├── lib/
 │   ├── main.dart
-│   ├── screens/          # UI 화면
-│   ├── services/         # API, DB, 알림
-│   ├── models/           # 데이터 모델
-│   └── widgets/          # 공통 위젯
-├── test/
+│   ├── services/         # GeminiService, DbService
+│   └── models/           # Medicine, Schedule, IntakeLog
 ├── docs/
+│   ├── setup.md
+│   ├── PRD.md
+│   ├── WBS.md
+│   └── ARCHITECTURE.md
+├── .planning/
+├── .env                  # API 키 (gitignore)
 ├── AGENTS.md
+├── BONUS.md
 └── README.md
 ```
 

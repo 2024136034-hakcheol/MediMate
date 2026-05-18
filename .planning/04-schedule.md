@@ -25,6 +25,8 @@
 ### 11주차 — 설계·환경 구축
 - [x] Flutter SDK 설치 및 프로젝트 초기화
 - [x] `docs/ARCHITECTURE.md` 확정
+- [x] `docs/setup.md` 작성
+- [x] `.vscode/extensions.json` 추가
 - [x] Gemini API 키 발급 및 연동 테스트
 - [x] sqflite 초기화 코드 작성
 - [x] "Hello World" 앱 빌드 및 실행 확인
