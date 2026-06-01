@@ -7,36 +7,29 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
-    :root { --green: #2e7d32; --light-green: #4CAF50; --bg: #f9fbe7; }
+    :root { --green: #2e7d32; --light-green: #4CAF50; }
     .reveal { font-family: 'Segoe UI', sans-serif; }
     .reveal h1 { color: var(--green); font-size: 2em; }
     .reveal h2 { color: var(--green); border-bottom: 3px solid var(--light-green); padding-bottom: 8px; }
-    .reveal h3 { color: var(--green); }
-    .title-slide { background: linear-gradient(135deg, #1b5e20, #2e7d32) !important; }
-    .title-slide h1 { color: white !important; font-size: 2.5em !important; }
-    .title-slide p  { color: #c8e6c9 !important; font-size: 1.1em; }
     .pill-box {
       display: inline-block; background: var(--light-green);
       color: white; border-radius: 20px; padding: 6px 18px;
       font-size: 0.85em; margin: 4px;
     }
-    .pain { background: #fff3e0; border-left: 5px solid #ff9800;
-            padding: 12px 18px; border-radius: 6px; margin: 10px 0; text-align: left; }
+    .pain {
+      background: #fff3e0; border-left: 5px solid #ff9800;
+      padding: 12px 18px; border-radius: 6px; margin: 10px 0; text-align: left;
+    }
     .flow {
       display: flex; align-items: center; justify-content: center;
       gap: 10px; font-size: 0.9em; flex-wrap: wrap; margin-top: 20px;
     }
     .flow-step {
       background: var(--green); color: white;
-      padding: 12px 20px; border-radius: 8px; font-weight: bold;
+      padding: 14px 22px; border-radius: 8px; font-weight: bold;
     }
     .flow-arrow { font-size: 1.4em; color: var(--green); }
-    .tag { background: #e8f5e9; color: var(--green); border-radius: 4px;
-           padding: 2px 8px; font-size: 0.75em; }
     .mermaid { font-size: 0.75em; }
-    .done-badge { color: var(--light-green); font-weight: bold; }
-    .active-badge { color: #ff9800; font-weight: bold; }
-    table { font-size: 0.8em; }
     .reveal section { padding: 20px; }
   </style>
 </head>
@@ -45,8 +38,8 @@
   <div class="slides">
 
     <!-- 1. 타이틀 -->
-    <section class="title-slide" data-background="linear-gradient(135deg,#1b5e20,#388e3c)">
-      <h1>💊 MediMate</h1>
+    <section data-background="linear-gradient(135deg,#1b5e20,#388e3c)">
+      <h1 style="color:white; font-size:2.5em;">MediMate</h1>
       <p style="font-size:1.3em; color:#fff;">AI 약 복용 관리 앱</p>
       <br>
       <p>
@@ -60,16 +53,16 @@
 
     <!-- 2. 문제 정의 -->
     <section>
-      <h2>🔍 문제 정의</h2>
+      <h2>문제 정의</h2>
       <p style="color:#555; font-size:0.85em;">약을 제대로 복용하지 못하는 이유</p>
       <div class="pain">
-        😩 &nbsp;<strong>입력이 귀찮다</strong> — 약 이름·용량·복용 시간 모두 손으로 입력
+        <strong>입력이 귀찮다</strong> — 약 이름·용량·복용 시간 모두 손으로 직접 입력
       </div>
       <div class="pain">
-        ⏰ &nbsp;<strong>잊어버린다</strong> — 바쁜 일상에서 복용 시간을 자주 놓침
+        <strong>잊어버린다</strong> — 바쁜 일상에서 복용 시간을 자주 놓침
       </div>
       <div class="pain">
-        📋 &nbsp;<strong>주의사항을 모른다</strong> — 약 봉투 텍스트를 꼼꼼히 읽지 않음
+        <strong>주의사항을 모른다</strong> — 약 봉투 텍스트를 꼼꼼히 읽지 않음
       </div>
       <br>
       <p style="font-size:0.85em; color:var(--green); font-weight:bold;">
@@ -79,18 +72,18 @@
 
     <!-- 3. 비전 / 해결책 -->
     <section>
-      <h2>🎯 비전 &amp; 해결책</h2>
+      <h2>비전 &amp; 해결책</h2>
       <p style="font-size:0.95em; color:#333;">
         <strong>"카메라로 찍기만 하면, 나머지는 AI가 알아서"</strong>
       </p>
       <div class="flow">
-        <div class="flow-step">📷<br>촬영</div>
+        <div class="flow-step">촬영</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-step">🤖<br>AI 인식</div>
+        <div class="flow-step">AI 인식</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-step">📅<br>스케줄 자동 생성</div>
+        <div class="flow-step">스케줄 자동 생성</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-step">🔔<br>복용 알림</div>
+        <div class="flow-step">복용 알림</div>
       </div>
       <br>
       <div style="font-size:0.8em; text-align:left;">
@@ -104,25 +97,25 @@
 
     <!-- 4. WBS 진행 현황 -->
     <section>
-      <h2>📋 WBS — 진행 현황</h2>
-      <div class="mermaid" id="gantt-chart">
+      <h2>WBS — 진행 현황</h2>
+      <div class="mermaid">
 gantt
   dateFormat YYYY-MM-DD
   axisFormat %m/%d
-  section 1. 기획 ✅
+  section 1. 기획
   비전·목표 정의              :done, 2026-05-11, 2d
   PRD·요구사항 작성            :done, 2026-05-11, 2d
   WBS·일정 수립               :done, 2026-05-12, 2d
   ADR·AGENTS.md 작성          :done, 2026-05-13, 2d
   GitHub 리포 생성 및 push    :done, 2026-05-14, 1d
-  section 2. 설계·환경 ✅
+  section 2. 설계·환경
   Flutter SDK 설치             :done, 2026-05-18, 2d
   아키텍처·디렉토리 구조 확정  :done, 2026-05-19, 2d
   Gemini API 연동              :done, 2026-05-20, 2d
   sqflite DB 초기화            :done, 2026-05-21, 2d
   docs/setup.md 작성           :done, 2026-05-22, 1d
   Hello World 빌드 확인        :done, 2026-05-23, 1d
-  section 3. 구현 1 🔄
+  section 3. 구현 1
   카메라 스캔 화면 (F-01)      :active, 2026-05-25, 5d
   AI 인식 결과 화면 (F-01)     :active, 2026-05-28, 4d
   복용 스케줄 생성 (F-02)      :        2026-06-01, 3d
@@ -140,15 +133,15 @@ gantt
 
     <!-- 5. 아키텍처 -->
     <section>
-      <h2>🏗 아키텍처</h2>
-      <div class="mermaid" id="arch-chart">
+      <h2>아키텍처</h2>
+      <div class="mermaid">
 graph LR
-  A[👤 사용자] --> B[Flutter UI\npresentation/]
+  A[사용자] --> B[Flutter UI\npresentation/]
   B --> C[GeminiService\ndata/api/]
   B --> D[DbService\ndata/local/]
-  B --> E[🔔 로컬 알림]
-  C --> F[☁️ Gemini API\n무료 · Vision]
-  D --> G[🗄️ SQLite\n기기 내부]
+  B --> E[로컬 알림]
+  C --> F[Gemini API\n무료 · Vision]
+  D --> G[SQLite\n기기 내부]
       </div>
       <p style="font-size:0.7em; color:#888; margin-top:10px;">
         백엔드 없음 · 완전 로컬 · 인터넷은 AI 호출 시에만
@@ -161,9 +154,7 @@ graph LR
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
   mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
-
   Reveal.initialize({ hash: true, transition: 'slide', controls: true, progress: true });
-
   Reveal.on('ready', () => {
     mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
   });
