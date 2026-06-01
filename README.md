@@ -51,6 +51,10 @@
 - [resources/04-doc-scaffold.md](resources/04-doc-scaffold.md) — 문서 스캐폴드 트리
 - [resources/05-bootstrap-prompt.md](resources/05-bootstrap-prompt.md) — AI 부트스트랩 프롬프트
 - [resources/06-llm-wiki-guide.md](resources/06-llm-wiki-guide.md) — 암묵지 운영 가이드
+- [resources/01-planning-workflow.md](resources/01-planning-workflow.md) — 기획 워크플로우 상세
+- [resources/02-wbs-template.md](resources/02-wbs-template.md) — WBS 템플릿
+- [resources/03-adr-template.md](resources/03-adr-template.md) — ADR 템플릿
+- [resources/04-risk-checklist.md](resources/04-risk-checklist.md) — 위험 체크리스트
 - [resources/10-demo-checklist.md](resources/10-demo-checklist.md) — 데모 시연 체크리스트
 - [resources/11-qna-prep.md](resources/11-qna-prep.md) — Q&A 대비 질문 모음
 
