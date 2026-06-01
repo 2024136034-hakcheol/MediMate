@@ -39,6 +39,9 @@ dependencies:
   image_picker: ^1.1.2                 # 카메라/갤러리 이미지 선택
   flutter_local_notifications: ^18.0.1 # 로컬 푸시 알림
   sqflite_common_ffi: ^2.3.4          # Windows/Linux SQLite 지원
+  shared_preferences: ^2.3.3         # 온보딩 완료 여부 저장
+  table_calendar: ^3.1.2             # 복용 기록 달력
+  timezone: ^0.10.1                  # 알림 시간 처리
 
 dev_dependencies:
   flutter_test:

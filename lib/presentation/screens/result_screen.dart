@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/api/gemini_service.dart';
 import '../../data/local/db_service.dart';
+import '../../data/local/notification_service.dart';
 import '../../domain/entities/medicine.dart';
 import '../../domain/entities/schedule.dart';
 
@@ -60,8 +61,8 @@ class _ResultScreenState extends State<ResultScreen> {
       final frequency = widget.medicineInfo.frequency ?? 1;
       for (int i = 0; i < frequency; i++) {
         final hour = (_scheduleTime.hour + i * (24 ~/ frequency)) % 24;
-        final time =
-            '${hour.toString().padLeft(2, '0')}:${_scheduleTime.minute.toString().padLeft(2, '0')}';
+        final minute = _scheduleTime.minute;
+        final time = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
         await db.insertSchedule(Schedule(
           medicineId: medicineId,
           time: time,
@@ -73,6 +74,13 @@ class _ResultScreenState extends State<ResultScreen> {
                   .substring(0, 10)
               : null,
         ));
+        // 매일 반복 알림 등록
+        await NotificationService().scheduleDailyDose(
+          id: medicineId * 10 + i,
+          medicineName: _nameCtrl.text.trim(),
+          hour: hour,
+          minute: minute,
+        );
       }
 
       if (!mounted) return;

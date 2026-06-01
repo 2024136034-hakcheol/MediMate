@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/local/db_service.dart';
 import '../../domain/entities/medicine.dart';
 import 'scan_screen.dart';
+import 'medicine_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Map<String, dynamic>> _todaySchedules = [];
   List<Medicine> _medicines = [];
   bool _isLoading = true;
 
@@ -21,13 +23,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _load() async {
-    final list = await DbService().getMedicines();
+    final db = DbService();
+    final schedules = await db.getTodaySchedules();
+    final medicines = await db.getMedicines();
     if (mounted) {
       setState(() {
-        _medicines = list;
+        _todaySchedules = schedules;
+        _medicines = medicines;
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _markTaken(int scheduleId) async {
+    await DbService().recordIntake(scheduleId);
+    _load();
   }
 
   Future<void> _confirmDelete(Medicine m) async {
@@ -36,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('약 삭제'),
-        content: Text('${m.name}을(를) 목록에서 삭제할까요?'),
+        content: Text('${m.name}을(를) 삭제할까요?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('취소')),
           TextButton(
@@ -59,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Row(
           children: [
-            Icon(Icons.medication, color: Colors.white, size: 24),
+            Icon(Icons.medication, color: Colors.white, size: 22),
             SizedBox(width: 8),
             Text('MediMate', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
@@ -73,14 +83,18 @@ class _HomeScreenState extends State<HomeScreen> {
           : RefreshIndicator(
               color: const Color(0xFF2e7d32),
               onRefresh: _load,
-              child: _medicines.isEmpty ? _emptyState() : _medicineList(),
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _todaySection(),
+                  const SizedBox(height: 20),
+                  _medicinesSection(),
+                ],
+              ),
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ScanScreen()),
-          );
+          await Navigator.push(context, MaterialPageRoute(builder: (_) => const ScanScreen()));
           _load();
         },
         backgroundColor: const Color(0xFF2e7d32),
@@ -91,44 +105,112 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _emptyState() {
-    return ListView(
+  Widget _todaySection() {
+    final now = DateTime.now();
+    final dateStr = '${now.month}월 ${now.day}일 오늘의 복용';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-        const Column(
-          children: [
-            Icon(Icons.medication_outlined, size: 80, color: Color(0xFFa5d6a7)),
-            SizedBox(height: 16),
-            Text(
-              '등록된 약이 없습니다',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+        Text(dateStr, style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        if (_todaySchedules.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
             ),
-            SizedBox(height: 8),
-            Text('아래 버튼을 눌러 약 포장을 스캔하세요', style: TextStyle(color: Colors.grey)),
-          ],
-        ),
+            child: const Center(
+              child: Text('오늘 복용할 약이 없습니다', style: TextStyle(color: Colors.grey)),
+            ),
+          )
+        else
+          ...(_todaySchedules.map((s) => _scheduleCard(s))),
       ],
     );
   }
 
-  Widget _medicineList() {
+  Widget _scheduleCard(Map<String, dynamic> s) {
+    final taken = s['log_id'] != null;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: taken ? const Color(0xFFe8f5e9) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: taken ? const Color(0xFF4CAF50) : Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: taken ? const Color(0xFF4CAF50) : const Color(0xFFeeeeee),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              s['schedule_time'] as String,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: taken ? Colors.white : Colors.black54,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(s['medicine_name'] as String,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                if (s['medicine_dosage'] != null)
+                  Text(s['medicine_dosage'] as String,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+          ),
+          if (!taken)
+            ElevatedButton(
+              onPressed: () => _markTaken(s['schedule_id'] as int),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2e7d32),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: const TextStyle(fontSize: 12),
+              ),
+              child: const Text('복용 완료'),
+            )
+          else
+            const Icon(Icons.check_circle, color: Color(0xFF4CAF50), size: 28),
+        ],
+      ),
+    );
+  }
+
+  Widget _medicinesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            '복용 중인 약 ${_medicines.length}종',
-            style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
-          ),
+        Text(
+          '등록된 약 ${_medicines.length}종',
+          style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600),
         ),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            itemCount: _medicines.length,
-            itemBuilder: (_, i) => _medicineCard(_medicines[i]),
-          ),
-        ),
+        const SizedBox(height: 8),
+        if (_medicines.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+            child: const Center(
+              child: Text('등록된 약이 없습니다\n아래 버튼으로 스캔하세요',
+                  textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+            ),
+          )
+        else
+          ...(_medicines.map((m) => _medicineCard(m))),
       ],
     );
   }
@@ -139,35 +221,22 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, 2)),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => MedicineDetailScreen(medicine: m)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         leading: CircleAvatar(
-          radius: 24,
+          radius: 22,
           backgroundColor: const Color(0xFF2e7d32),
-          child: Text(
-            m.name[0].toUpperCase(),
-            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          child: Text(m.name[0].toUpperCase(),
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
         ),
-        title: Text(m.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (m.dosage != null && m.dosage!.isNotEmpty)
-              Text(m.dosage!, style: const TextStyle(color: Color(0xFF555555))),
-            if (m.cautions != null && m.cautions!.isNotEmpty)
-              Text(
-                m.cautions!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-          ],
-        ),
+        title: Text(m.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(m.dosage ?? '용량 정보 없음', style: const TextStyle(color: Colors.grey)),
         trailing: IconButton(
           icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
           onPressed: () => _confirmDelete(m),
