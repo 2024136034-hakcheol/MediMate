@@ -39,7 +39,7 @@ class GeminiService {
 
   void init() {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    _model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey);
+    _model = GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: apiKey);
   }
 
   Future<MedicineInfo?> analyzeMedicineImage(File imageFile) async {
