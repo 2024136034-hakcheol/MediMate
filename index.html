@@ -148,6 +148,76 @@ graph LR
       </p>
     </section>
 
+    <!-- 6. 사용자 시나리오 -->
+    <section>
+      <h2>사용자 시나리오</h2>
+      <p style="color:#555; font-size:0.85em; margin-bottom:20px;">병원에서 감기약 3종을 처방받은 직장인</p>
+      <table style="width:100%; font-size:0.8em; border-collapse:collapse;">
+        <tr style="background:#ffebee;">
+          <td style="padding:12px; border:1px solid #ddd; width:50%; vertical-align:top;">
+            <strong style="color:#c62828;">기존 방식</strong><br><br>
+            약 봉투 꺼내서 약 이름 확인<br>
+            → 앱에 약 이름 직접 입력<br>
+            → 용량·복용 시간 다시 입력<br>
+            → 귀찮아서 포기<br>
+            → 첫날 저녁 복용 잊어버림
+          </td>
+          <td style="padding:12px; border:1px solid #ddd; vertical-align:top;">
+            <strong style="color:var(--green);">MediMate</strong><br><br>
+            약 포장 사진 한 장 촬영<br>
+            → AI가 약 정보 자동 인식<br>
+            → 복용 스케줄 자동 생성<br>
+            → 알림 자동 등록<br>
+            → 설정 완료 (30초)
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 7. 현재 진행 상황 -->
+    <section>
+      <h2>현재 진행 상황</h2>
+      <table style="width:100%; font-size:0.82em; border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--green); color:white;">
+            <th style="padding:8px; text-align:left;">항목</th>
+            <th style="padding:8px; width:80px; text-align:center;">상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px; border:1px solid #ddd;">Flutter 프로젝트 구조 (presentation/domain/data)</td><td style="text-align:center; border:1px solid #ddd; color:var(--green);">✅ 완료</td></tr>
+          <tr style="background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">Gemini API 연동 서비스 (GeminiService)</td><td style="text-align:center; border:1px solid #ddd; color:var(--green);">✅ 완료</td></tr>
+          <tr><td style="padding:8px; border:1px solid #ddd;">SQLite DB 초기화 & 데이터 모델 3종</td><td style="text-align:center; border:1px solid #ddd; color:var(--green);">✅ 완료</td></tr>
+          <tr style="background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">기본 홈 화면 빌드</td><td style="text-align:center; border:1px solid #ddd; color:var(--green);">✅ 완료</td></tr>
+          <tr><td style="padding:8px; border:1px solid #ddd;">카메라 스캔 화면 (F-01)</td><td style="text-align:center; border:1px solid #ddd; color:#ff9800;">🔄 진행 중</td></tr>
+          <tr style="background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">AI 인식 결과 화면 & 복용 스케줄 생성 (F-02)</td><td style="text-align:center; border:1px solid #ddd; color:#999;">예정</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8. 남은 일정 & 우선순위 -->
+    <section>
+      <h2>남은 일정 &amp; 우선순위</h2>
+      <table style="width:100%; font-size:0.82em; border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--green); color:white;">
+            <th style="padding:8px; text-align:left;">주차</th>
+            <th style="padding:8px; text-align:left;">목표</th>
+            <th style="padding:8px; text-align:left;">우선순위</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px; border:1px solid #ddd;">13주차</td><td style="padding:8px; border:1px solid #ddd;">로컬 알림 · 복용 기록 달력 · 통계</td><td style="padding:8px; border:1px solid #ddd; color:#c62828;"><strong>Must</strong></td></tr>
+          <tr style="background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">14주차</td><td style="padding:8px; border:1px solid #ddd;">APK 빌드 · 문서 완비</td><td style="padding:8px; border:1px solid #ddd; color:#f57f17;"><strong>Should</strong></td></tr>
+          <tr><td style="padding:8px; border:1px solid #ddd;">15주차</td><td style="padding:8px; border:1px solid #ddd;">최종 발표</td><td style="padding:8px; border:1px solid #ddd; color:#555;">마감</td></tr>
+        </tbody>
+      </table>
+      <br>
+      <p style="font-size:0.8em; color:var(--green); text-align:left;">
+        피드백 반영 후 우선순위 재조정 예정
+      </p>
+    </section>
+
   </div>
 </div>
 
