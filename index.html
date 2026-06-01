@@ -104,21 +104,37 @@
 
     <!-- 4. WBS 진행 현황 -->
     <section>
-      <h2>📋 WBS 진행 현황</h2>
+      <h2>📋 WBS — 진행 현황</h2>
       <div class="mermaid" id="gantt-chart">
 gantt
   dateFormat YYYY-MM-DD
   axisFormat %m/%d
-  section 기획
-  기획·문서 작성       :done,    p1, 2026-05-11, 7d
-  section 설계
-  환경 구축·설계       :done,    p2, 2026-05-18, 7d
-  section 구현
-  핵심 기능 1 + 중간발표 :active,  p3, 2026-05-25, 7d
-  핵심 기능 2 + 테스트  :         p4, 2026-06-08, 7d
-  section 마무리
-  배포·문서화          :         p5, 2026-06-15, 7d
-  최종 발표            :milestone, 2026-06-22, 1d
+  section 1. 기획 ✅
+  비전·목표 정의              :done, 2026-05-11, 2d
+  PRD·요구사항 작성            :done, 2026-05-11, 2d
+  WBS·일정 수립               :done, 2026-05-12, 2d
+  ADR·AGENTS.md 작성          :done, 2026-05-13, 2d
+  GitHub 리포 생성 및 push    :done, 2026-05-14, 1d
+  section 2. 설계·환경 ✅
+  Flutter SDK 설치             :done, 2026-05-18, 2d
+  아키텍처·디렉토리 구조 확정  :done, 2026-05-19, 2d
+  Gemini API 연동              :done, 2026-05-20, 2d
+  sqflite DB 초기화            :done, 2026-05-21, 2d
+  docs/setup.md 작성           :done, 2026-05-22, 1d
+  Hello World 빌드 확인        :done, 2026-05-23, 1d
+  section 3. 구현 1 🔄
+  카메라 스캔 화면 (F-01)      :active, 2026-05-25, 5d
+  AI 인식 결과 화면 (F-01)     :active, 2026-05-28, 4d
+  복용 스케줄 생성 (F-02)      :        2026-06-01, 3d
+  중간발표                     :milestone, 2026-06-01, 1d
+  section 4. 구현 2
+  로컬 알림 (F-03)             :        2026-06-08, 3d
+  복용 기록 달력 (F-04)        :        2026-06-10, 3d
+  통계·주의사항 (F-04,F-05)    :        2026-06-12, 3d
+  section 5. 마무리
+  APK 빌드·배포                :        2026-06-15, 3d
+  문서 최종 정리               :        2026-06-18, 3d
+  최종 발표                    :milestone, 2026-06-22, 1d
       </div>
     </section>
 
