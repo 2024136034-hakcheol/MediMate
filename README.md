@@ -25,11 +25,34 @@
 
 ## 문서
 
-- [설치 & 실행 가이드](docs/setup.md)
-- [기획서 & 요구사항](docs/PRD.md)
-- [WBS & 일정표](docs/WBS.md)
-- [아키텍처 & ADR](docs/ARCHITECTURE.md)
-- [AI Agent 운영 가이드](AGENTS.md)
+### 핵심 문서
+- [AGENTS.md](AGENTS.md) — AI Agent 운영 가이드
+- [BONUS.md](BONUS.md) — 가산점 트래킹
+- [AUTHORING.문학철.v0.1.0.md](AUTHORING.문학철.v0.1.0.md) — 개인 AI 활용 기법
+
+### docs/
+- [docs/setup.md](docs/setup.md) — 환경 구축 & 실행 가이드
+- [docs/PRD.md](docs/PRD.md) — 기획서 & 요구사항
+- [docs/WBS.md](docs/WBS.md) — WBS & 일정표
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — 아키텍처 & ADR
+- [docs/qna-log.md](docs/qna-log.md) — Q&A 기록 (발표 후 작성)
+
+### .planning/
+- [.planning/00-vision.md](.planning/00-vision.md) — 비전·목표
+- [.planning/01-requirements.md](.planning/01-requirements.md) — 요구사항
+- [.planning/02-wbs.md](.planning/02-wbs.md) — WBS & 위험 식별
+- [.planning/04-schedule.md](.planning/04-schedule.md) — 6주 일정
+- [.planning/decisions/ADR-0001-mobile-framework.md](.planning/decisions/ADR-0001-mobile-framework.md) — ADR: Flutter 선택
+
+### resources/
+- [resources/01-team-policy.md](resources/01-team-policy.md) — 팀 구성 가이드
+- [resources/02-evaluation-rubric.md](resources/02-evaluation-rubric.md) — 평가표 전문
+- [resources/03-bonus-points.md](resources/03-bonus-points.md) — 가산점 상세
+- [resources/04-doc-scaffold.md](resources/04-doc-scaffold.md) — 문서 스캐폴드 트리
+- [resources/05-bootstrap-prompt.md](resources/05-bootstrap-prompt.md) — AI 부트스트랩 프롬프트
+- [resources/06-llm-wiki-guide.md](resources/06-llm-wiki-guide.md) — 암묵지 운영 가이드
+- [resources/10-demo-checklist.md](resources/10-demo-checklist.md) — 데모 시연 체크리스트
+- [resources/11-qna-prep.md](resources/11-qna-prep.md) — Q&A 대비 질문 모음
 
 ## 프로젝트 구조
 
