@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/main_screen.dart';
 import 'presentation/theme/app_theme.dart';
 
 class MediMateApp extends StatelessWidget {
@@ -9,8 +9,9 @@ class MediMateApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MediMate',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const HomeScreen(),
+      home: const MainScreen(),
     );
   }
 }
