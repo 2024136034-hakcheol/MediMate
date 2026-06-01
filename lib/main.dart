@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'data/api/gemini_service.dart';
 import 'data/local/notification_service.dart';
@@ -19,8 +18,6 @@ Future<void> main() async {
   GeminiService().init();
   await NotificationService().init();
 
-  final prefs = await SharedPreferences.getInstance();
-  final onboardingDone = prefs.getBool('onboarding_done') ?? false;
-
-  runApp(MediMateApp(onboardingDone: onboardingDone));
+  // 테스트용: 항상 온보딩 표시
+  runApp(const MediMateApp(onboardingDone: false));
 }
