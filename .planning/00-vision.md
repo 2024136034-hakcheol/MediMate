@@ -25,5 +25,5 @@
 
 ## 팀
 
-- **PillNova** (문학철, 김성진)
+- **PillNova** (문학철)
 - 앱 프로그래밍 응용 — Vibe Coding Project

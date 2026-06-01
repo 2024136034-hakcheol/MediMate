@@ -62,4 +62,4 @@ MediMate/
 ## 팀
 
 - **PillNova** — 앱 프로그래밍 응용 Vibe Coding Project
-- 문학철, 김성진
+- 문학철 (단독)

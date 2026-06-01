@@ -1,10 +1,10 @@
-# AUTHORING.문학철_김성진.v0.1.0
+# AUTHORING.문학철.v0.1.0
 
-> PillNova 팀 AI Agent 활용 기법 — MediMate 프로젝트 기준
+> PillNova AI Agent 활용 기법 — MediMate 프로젝트 기준
 
-## 팀원
+## 개발자
 
-- 문학철, 김성진
+- 문학철 (단독)
 
 ---
 
@@ -17,11 +17,10 @@
 
 ---
 
-## 2. 문학철 — 나만의 기법: PRD-Driven Prompting
+## 2. 나만의 기법 1: PRD-Driven Prompting
 
 ### 역할
-- Gemini API 연동 (약 이미지 인식, 주의사항 요약)
-- 서비스 레이어 설계 및 구현 (GeminiService, ScheduleService)
+- 전체 기획·설계·구현 담당
 
 ### 기법 설명
 
@@ -55,12 +54,7 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 
 ---
 
-## 3. 김성진 — 나만의 기법: UI-First Mocking
-
-### 역할
-- Flutter UI 화면 구현 (ScanScreen, HomeScreen, CalendarScreen 등)
-- 로컬 DB 설계 및 구현 (sqflite)
-- 로컬 알림 구현 (flutter_local_notifications)
+## 3. 나만의 기법 2: UI-First Mocking
 
 ### 기법 설명
 
@@ -73,7 +67,6 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 ```
 
 **왜 이렇게 하는가:**
-- API 준비 여부와 관계없이 UI 개발 병렬 진행 가능
 - Gemini API 호출 횟수를 아껴 무료 한도 내에서 개발 가능
 - 중간발표 데모 시 API 오류와 무관하게 화면 시연 가능
 
@@ -82,17 +75,9 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 2. UI 완성 후 MockData → 실제 GeminiService로 교체
 3. 교체 후 실제 API 호출 테스트
 
-### 프롬프트 패턴
-
-```
-"Flutter로 [화면 이름] 화면을 만들어줘.
-표시할 데이터: [데이터 구조]
-목업 데이터로 먼저 구현하고 나중에 실제 데이터로 교체할 수 있게 해줘."
-```
-
 ---
 
-## 4. 공통 암묵지 (LLM Wiki)
+## 4. 암묵지 (LLM Wiki)
 
 | 상황 | 문제 | 해결책 |
 |------|------|--------|
