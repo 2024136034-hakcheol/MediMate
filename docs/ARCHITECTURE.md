@@ -126,22 +126,28 @@ CREATE TABLE intake_logs (
 ```
 lib/
 ├── main.dart
-├── screens/
-│   ├── home_screen.dart
-│   ├── scan_screen.dart
-│   ├── result_screen.dart
-│   ├── calendar_screen.dart
-│   └── med_detail_screen.dart
-├── services/
-│   ├── gemini_service.dart
-│   ├── medicine_service.dart
-│   ├── schedule_service.dart
-│   └── notification_service.dart
-├── models/
-│   ├── medicine.dart
-│   ├── schedule.dart
-│   └── intake_log.dart
-└── widgets/
-    ├── medicine_card.dart
-    └── intake_calendar.dart
+├── app.dart
+├── presentation/
+│   ├── screens/
+│   │   ├── home_screen.dart
+│   │   ├── scan_screen.dart       ← 12주차 구현
+│   │   ├── result_screen.dart     ← 12주차 구현
+│   │   └── calendar_screen.dart   ← 13주차 구현
+│   ├── widgets/                   ← 공통 위젯
+│   └── theme/
+│       └── app_theme.dart
+├── application/
+│   └── view_models/               ← 상태 관리
+├── domain/
+│   ├── entities/
+│   │   ├── medicine.dart
+│   │   ├── schedule.dart
+│   │   └── intake_log.dart
+│   └── services/                  ← 비즈니스 로직
+└── data/
+    ├── api/
+    │   └── gemini_service.dart
+    ├── local/
+    │   └── db_service.dart
+    └── repositories/
 ```
