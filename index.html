@@ -94,7 +94,6 @@
   .callout b { color:var(--navy); }
 
   .mermaid { font-size:.66em; }
-  #wbs-gantt .mermaid { font-size:.46em; }
   #wbs-gantt .lede { margin-bottom:8px; }
 
   /* Title slide */
@@ -249,8 +248,8 @@ gantt
   통계 및 주의사항       :done, 2026-06-12, 3d
   section 마무리
   APK 빌드 배포          :done, 2026-06-15, 3d
-  문서 최종 정리         :done, 2026-06-18, 3d
-  최종 발표              :milestone, 2026-06-22, 1d
+  문서 정리              :done, 2026-06-18, 3d
+  최종 발표              :milestone, 2026-06-21, 1d
       </div>
       <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
@@ -347,10 +346,25 @@ graph LR
       tertiaryColor: '#f8fafc',
       fontFamily: 'Pretendard, Segoe UI, sans-serif'
     },
-    securityLevel: 'loose'
+    securityLevel: 'loose',
+    gantt: {
+      barHeight: 12,
+      barGap: 2,
+      topPadding: 24,
+      leftPadding: 90,
+      rightPadding: 100,
+      fontSize: 9,
+      sectionFontSize: 9
+    }
   });
+  function renderMermaidIn(slide) {
+    if (!slide) return;
+    const nodes = slide.querySelectorAll('.mermaid:not([data-processed="true"])');
+    if (nodes.length) mermaid.run({ nodes });
+  }
   Reveal.initialize({ hash: true, transition: 'slide', controls: true, progress: true, slideNumber: 'c/t' });
-  setTimeout(() => { mermaid.run(); }, 800);
+  Reveal.on('ready', event => renderMermaidIn(event.currentSlide));
+  Reveal.on('slidechanged', event => renderMermaidIn(event.currentSlide));
 </script>
 </body>
 </html>
