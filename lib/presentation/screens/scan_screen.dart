@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../data/api/gemini_service.dart';
 import 'result_screen.dart';
+import 'scan_result_list_screen.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -24,17 +25,23 @@ class _ScanScreenState extends State<ScanScreen> {
 
     setState(() => _isLoading = true);
     try {
-      final result = await GeminiService().analyzeMedicineImage(File(image.path));
+      final results = await GeminiService().analyzeMedicineImage(File(image.path));
       if (!mounted) return;
 
-      if (result == null) {
+      if (results.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('약 정보를 인식하지 못했습니다. 다시 시도해주세요.')),
         );
+      } else if (results.length == 1) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ResultScreen(medicineInfo: results.first)),
+        );
+        if (mounted) Navigator.pop(context);
       } else {
         await Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => ResultScreen(medicineInfo: result)),
+          MaterialPageRoute(builder: (_) => ScanResultListScreen(medicines: results)),
         );
         if (mounted) Navigator.pop(context);
       }

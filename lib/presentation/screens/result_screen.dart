@@ -87,7 +87,7 @@ class _ResultScreenState extends State<ResultScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${_nameCtrl.text} 등록 완료')),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

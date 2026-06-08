@@ -36,33 +36,36 @@ class GeminiService {
   GeminiService._internal();
 
   String _apiKey = '';
-  // v1 endpoint로 최신 모델 사용
-  static const _model = 'gemini-1.5-flash';
+  // v1 endpoint로 최신 모델 사용 (gemini-1.5-flash는 v1에서 지원 종료되어 2.5-flash로 교체)
+  static const _model = 'gemini-2.5-flash';
   static const _baseUrl = 'https://generativelanguage.googleapis.com/v1/models';
 
   void init() {
     _apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
   }
 
-  Future<MedicineInfo?> analyzeMedicineImage(File imageFile) async {
+  Future<List<MedicineInfo>> analyzeMedicineImage(File imageFile) async {
     final imageBytes = await imageFile.readAsBytes();
     final base64Image = base64Encode(imageBytes);
 
     const prompt = '''
 당신은 약학 전문가입니다.
-첨부된 약 포장지 이미지를 분석하여 아래 JSON 형식으로 정보를 추출하세요.
+첨부된 이미지에 보이는 약을 모두 분석하여 아래 JSON 배열 형식으로 정보를 추출하세요.
+약이 여러 종류 보이면 각각을 배열의 항목으로 추가하고, 한 종류만 보이면 항목을 1개만 담은 배열로 반환하세요.
 이미지에서 확인할 수 없는 항목은 null로 반환하세요.
 
-{
-  "name": "약 이름",
-  "dosage": "1회 복용량 (예: 500mg, 1정)",
-  "frequency": 1일 복용 횟수 (숫자),
-  "duration_days": 복용 기간 (숫자, 일 단위, 없으면 null),
-  "timing": "복용 시점 (예: 식후 30분, 취침 전)",
-  "cautions": "주요 주의사항 3줄 이내 요약"
-}
+[
+  {
+    "name": "약 이름",
+    "dosage": "1회 복용량 (예: 500mg, 1정)",
+    "frequency": 1일 복용 횟수 (숫자),
+    "duration_days": 복용 기간 (숫자, 일 단위, 없으면 null),
+    "timing": "복용 시점 (예: 식후 30분, 취침 전)",
+    "cautions": "주요 주의사항 3줄 이내 요약"
+  }
+]
 
-JSON 형식 외 다른 텍스트는 출력하지 마세요.
+JSON 배열 형식 외 다른 텍스트는 출력하지 마세요.
 ''';
 
     final url = Uri.parse('$_baseUrl/$_model:generateContent?key=$_apiKey');
@@ -94,10 +97,21 @@ JSON 형식 외 다른 텍스트는 출력하지 마세요.
 
     final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
     final text = responseJson['candidates']?[0]?['content']?['parts']?[0]?['text'] as String?;
-    if (text == null) return null;
+    if (text == null) return [];
 
     final jsonStr = text.replaceAll('```json', '').replaceAll('```', '').trim();
-    final parsed = jsonDecode(jsonStr) as Map<String, dynamic>;
-    return MedicineInfo.fromJson(parsed);
+    final decoded = jsonDecode(jsonStr);
+
+    // 모델이 배열 대신 단일 객체로 반환하는 경우도 호환 처리
+    final List<dynamic> list = decoded is List
+        ? decoded
+        : decoded is Map<String, dynamic>
+            ? [decoded]
+            : [];
+
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map((m) => MedicineInfo.fromJson(m))
+        .toList();
   }
 }

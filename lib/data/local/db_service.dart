@@ -153,4 +153,49 @@ class DbService {
     }
     return map;
   }
+
+  // 최근 7일간 일자별 복용 현황 (예정 횟수 대비 실제 복용 횟수)
+  Future<List<Map<String, dynamic>>> getWeeklyAdherence() async {
+    final database = await db;
+    final now = DateTime.now();
+    final List<Map<String, dynamic>> days = [];
+
+    for (int i = 6; i >= 0; i--) {
+      final day = now.subtract(Duration(days: i));
+      final dateStr =
+          '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
+
+      final scheduled = Sqflite.firstIntValue(await database.rawQuery('''
+        SELECT COUNT(*) FROM schedules
+        WHERE is_active = 1 AND start_date <= ? AND (end_date IS NULL OR end_date >= ?)
+      ''', [dateStr, dateStr])) ?? 0;
+
+      final taken = Sqflite.firstIntValue(await database.rawQuery('''
+        SELECT COUNT(*) FROM intake_logs
+        WHERE status = 'taken' AND taken_at LIKE ?
+      ''', ['$dateStr%'])) ?? 0;
+
+      days.add({
+        'date': dateStr,
+        'weekday': day.weekday, // 1=월 ... 7=일
+        'scheduled': scheduled,
+        'taken': taken > scheduled ? scheduled : taken,
+      });
+    }
+    return days;
+  }
+
+  // 약별 누적 복용 횟수 (많이 챙겨 먹은 순)
+  Future<List<Map<String, dynamic>>> getMedicineIntakeCounts() async {
+    final database = await db;
+    return database.rawQuery('''
+      SELECT m.id AS medicine_id, m.name AS medicine_name,
+        COUNT(il.id) AS taken_count
+      FROM medicines m
+      JOIN schedules s ON s.medicine_id = m.id
+      LEFT JOIN intake_logs il ON il.schedule_id = s.id AND il.status = 'taken'
+      GROUP BY m.id
+      ORDER BY taken_count DESC
+    ''');
+  }
 }

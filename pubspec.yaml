@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.3.3         # 온보딩 완료 여부 저장
   table_calendar: ^3.1.2             # 복용 기록 달력
   timezone: ^0.10.1                  # 알림 시간 처리
+  fl_chart: ^0.69.0                  # 복용 통계 차트
 
 dev_dependencies:
   flutter_test:

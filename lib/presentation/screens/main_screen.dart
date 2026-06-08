@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'calendar_screen.dart';
+import 'statistics_screen.dart';
 import 'settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
     CalendarScreen(),
+    StatisticsScreen(),
     SettingsScreen(),
   ];
 
@@ -38,6 +40,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.calendar_month_outlined),
             selectedIcon: Icon(Icons.calendar_month, color: Color(0xFF2e7d32)),
             label: '복용 기록',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart, color: Color(0xFF2e7d32)),
+            label: '통계',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
