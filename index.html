@@ -1,103 +1,205 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>MediMate — 중간발표</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <style>
-    :root { --green: #2e7d32; --light-green: #4CAF50; }
-    .reveal { font-family: 'Segoe UI', sans-serif; }
-    .reveal h1 { color: var(--green); font-size: 2em; }
-    .reveal h2 { color: var(--green); border-bottom: 3px solid var(--light-green); padding-bottom: 8px; }
-    .pill-box {
-      display: inline-block; background: var(--light-green);
-      color: white; border-radius: 20px; padding: 6px 18px;
-      font-size: 0.85em; margin: 4px;
-    }
-    .pain {
-      background: #fff3e0; border-left: 5px solid #ff9800;
-      padding: 12px 18px; border-radius: 6px; margin: 10px 0; text-align: left;
-    }
-    .flow {
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px; font-size: 0.9em; flex-wrap: wrap; margin-top: 20px;
-    }
-    .flow-step {
-      background: var(--green); color: white;
-      padding: 14px 22px; border-radius: 8px; font-weight: bold;
-    }
-    .flow-arrow { font-size: 1.4em; color: var(--green); }
-    .mermaid { font-size: 0.75em; }
-    .reveal section { padding: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediMate — 최종 발표</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --navy: #0f2942;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --line: #e2e8f0;
+    --bg-soft: #f8fafc;
+    --teal: #0d9488;
+    --teal-deep: #0f766e;
+    --teal-soft: #f0fdfa;
+    --amber: #b45309;
+    --amber-soft: #fffbeb;
+    --red: #b91c1c;
+    --red-soft: #fef2f2;
+  }
+  * { box-sizing: border-box; }
+  .reveal { font-family: 'Pretendard','Malgun Gothic','Segoe UI',sans-serif; color: var(--ink); }
+  .reveal .slides section { text-align: left; padding: 50px 68px 64px; }
+  .reveal h1, .reveal h2, .reveal h3, .reveal h4 { letter-spacing: -0.015em; text-transform: none; }
+
+  .kicker { display:block; font-size:.5em; font-weight:700; letter-spacing:.24em; color:var(--teal-deep); text-transform:uppercase; margin:0 0 10px; }
+  .reveal h2.title { font-size:1.5em; color:var(--navy); margin:0 0 6px; font-weight:800; }
+  .lede { color:var(--muted); font-size:.55em; margin:0 0 28px; font-weight:400; }
+  hr.rule { border:none; border-top:1px solid var(--line); margin:0 0 30px; }
+
+  .foot { position:absolute; left:68px; bottom:24px; font-size:.34em; letter-spacing:.12em; color:var(--faint); text-transform:uppercase; }
+  .foot b { color: var(--teal-deep); }
+  .reveal .slide-number { background:transparent; color:var(--faint); font-size:14px; right:68px; bottom:20px; }
+
+  /* Cards */
+  .card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:26px 22px; }
+  .card .num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:var(--navy); color:#fff; font-size:.5em; font-weight:800; margin-bottom:18px; }
+  .card h4 { margin:0 0 10px; font-size:.62em; color:var(--navy); font-weight:800; }
+  .card p { margin:0; font-size:.46em; color:var(--muted); line-height:1.7; }
+
+  .insight { margin-top:30px; background:var(--navy); color:#fff; border-radius:12px; padding:20px 26px; font-size:.52em; line-height:1.6; }
+  .insight b { color:#5eead4; }
+
+  /* Stepper */
+  .stepper { display:flex; align-items:flex-start; justify-content:space-between; margin-top:38px; }
+  .step { flex:1; text-align:center; position:relative; padding:0 8px; }
+  .step .dot { width:42px; height:42px; border-radius:50%; background:var(--teal); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.48em; margin:0 auto 14px; position:relative; z-index:2; }
+  .step .label { font-size:.5em; font-weight:800; color:var(--navy); }
+  .step .desc { font-size:.42em; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .step:not(:last-child)::after { content:""; position:absolute; top:21px; left:56%; width:88%; height:2px; background:var(--line); z-index:1; }
+
+  .quote { font-size:.78em; font-weight:700; color:var(--navy); border-left:4px solid var(--teal); padding-left:20px; line-height:1.6; }
+  .quote span { color: var(--teal-deep); }
+
+  .tagrow { margin-top:36px; display:flex; flex-wrap:wrap; gap:10px; }
+  .tag { display:inline-block; font-size:.42em; border:1px solid var(--line); background:var(--bg-soft); color:var(--navy); padding:8px 16px; border-radius:7px; font-weight:700; letter-spacing:.02em; }
+  .tag.accent { border-color:#99f6e4; background:var(--teal-soft); color:var(--teal-deep); }
+
+  /* Tables */
+  table.report { width:100%; border-collapse:collapse; font-size:.5em; }
+  table.report th { text-align:left; font-size:.92em; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:800; padding:0 16px 12px; border-bottom:2px solid var(--navy); }
+  table.report td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:middle; line-height:1.5; }
+  table.report tbody tr:last-child td { border-bottom:1px solid var(--navy); }
+  table.report td.num { font-weight:800; color:var(--teal-deep); width:50px; }
+
+  .badge { display:inline-block; font-weight:800; padding:4px 13px; border-radius:20px; white-space:nowrap; letter-spacing:.02em; }
+  .badge.done { background:var(--teal-soft); color:var(--teal-deep); }
+  .badge.progress { background:var(--amber-soft); color:var(--amber); }
+  .badge.todo { background:var(--bg-soft); color:var(--muted); }
+  .badge.must { background:var(--red-soft); color:var(--red); }
+  .badge.should { background:var(--amber-soft); color:var(--amber); }
+  .badge.deadline { background:var(--navy); color:#fff; }
+
+  /* Compare */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:26px; }
+  .compare .col { border-radius:12px; padding:26px 28px; }
+  .compare .before { background:var(--red-soft); border:1px solid #fecaca; }
+  .compare .after { background:var(--teal-soft); border:1px solid #99f6e4; }
+  .compare h4 { margin:0 0 16px; font-size:.56em; font-weight:800; }
+  .compare .before h4 { color:var(--red); }
+  .compare .after h4 { color:var(--teal-deep); }
+  .compare ul { margin:0; padding:0; list-style:none; font-size:.46em; line-height:2.1; color:var(--ink); }
+  .compare .before li::before { content:"✕  "; color:var(--red); font-weight:800; }
+  .compare .after li::before { content:"✓  "; color:var(--teal-deep); font-weight:800; }
+
+  .callout { margin-top:26px; border-left:4px solid var(--teal); background:var(--teal-soft); padding:16px 22px; font-size:.48em; color:var(--teal-deep); border-radius:0 10px 10px 0; line-height:1.6; }
+  .callout b { color:var(--navy); }
+
+  .mermaid { font-size:.66em; }
+
+  /* Title slide */
+  .cover { height:100%; display:flex; flex-direction:column; justify-content:center; }
+  .cover .eyebrow { color:#5eead4; font-size:.5em; letter-spacing:.26em; text-transform:uppercase; margin-bottom:18px; font-weight:700; }
+  .cover h1 { color:#fff; font-size:2.6em; margin:0; font-weight:800; letter-spacing:-0.02em; }
+  .cover .sub { color:#cbd5e1; font-size:.7em; margin-top:14px; font-weight:300; letter-spacing:.01em; }
+  .cover .meta { margin-top:54px; display:flex; gap:40px; }
+  .cover .meta div { font-size:.4em; color:#94a3b8; }
+  .cover .meta span { display:block; color:#5eead4; font-weight:700; font-size:1.15em; letter-spacing:.16em; text-transform:uppercase; margin-bottom:6px; }
+
+  /* Closing slide */
+  .closing { height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+  .closing h1 { color:#fff; font-size:2.2em; font-weight:800; margin:0 0 14px; }
+  .closing p { color:#cbd5e1; font-size:.6em; margin:0; }
+</style>
 </head>
 <body>
 <div class="reveal">
   <div class="slides">
 
-    <!-- 1. 타이틀 -->
-    <section data-background="linear-gradient(135deg,#1b5e20,#388e3c)">
-      <h1 style="color:white; font-size:2.5em;">MediMate</h1>
-      <p style="font-size:1.3em; color:#fff;">AI 약 복용 관리 앱</p>
-      <br>
-      <p>
-        <span style="color:#a5d6a7;">PillNova</span> &nbsp;|&nbsp;
-        <span style="color:#a5d6a7;">문학철</span> &nbsp;|&nbsp;
-        <span style="color:#a5d6a7;">Flutter · Gemini API</span>
-      </p>
-      <br>
-      <p style="font-size:0.7em; color:#81c784;">앱 프로그래밍 응용 — Vibe Coding Project</p>
-    </section>
-
-    <!-- 2. 문제 정의 -->
-    <section>
-      <h2>문제 정의</h2>
-      <p style="color:#555; font-size:0.85em;">약을 제대로 복용하지 못하는 이유</p>
-      <div class="pain">
-        <strong>입력이 귀찮다</strong> — 약 이름·용량·복용 시간 모두 손으로 직접 입력
-      </div>
-      <div class="pain">
-        <strong>잊어버린다</strong> — 바쁜 일상에서 복용 시간을 자주 놓침
-      </div>
-      <div class="pain">
-        <strong>주의사항을 모른다</strong> — 약 봉투 텍스트를 꼼꼼히 읽지 않음
-      </div>
-      <br>
-      <p style="font-size:0.85em; color:var(--green); font-weight:bold;">
-        → 기존 앱의 공통 문제: <u>초기 설정이 너무 번거로워 아무도 안 씀</u>
-      </p>
-    </section>
-
-    <!-- 3. 비전 / 해결책 -->
-    <section>
-      <h2>비전 &amp; 해결책</h2>
-      <p style="font-size:0.95em; color:#333;">
-        <strong>"카메라로 찍기만 하면, 나머지는 AI가 알아서"</strong>
-      </p>
-      <div class="flow">
-        <div class="flow-step">📷 촬영</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">AI 인식</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">📅 스케줄 자동 생성</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🔔 복용 알림</div>
-      </div>
-      <br>
-      <div style="font-size:0.8em; text-align:left;">
-        <span class="pill-box">Flutter</span>
-        <span class="pill-box">Gemini API</span>
-        <span class="pill-box">SQLite</span>
-        <span class="pill-box">로컬 알림</span>
-        <span class="pill-box">완전 무료</span>
+    <!-- 01. Cover -->
+    <section data-background-gradient="linear-gradient(135deg, #0a1825 0%, #0f2942 55%, #0f766e 100%)">
+      <div class="cover">
+        <p class="eyebrow">최종 발표 · 2026. 06</p>
+        <h1>MediMate</h1>
+        <p class="sub">사진 한 장으로 끝내는 AI 약 복용 관리 — Flutter × Gemini API</p>
+        <div class="meta">
+          <div><span>담당</span>문학철 · PillNova</div>
+          <div><span>기술 스택</span>Flutter · Gemini API · SQLite</div>
+          <div><span>과목</span>앱 프로그래밍 응용</div>
+        </div>
       </div>
     </section>
 
-    <!-- 4. WBS 진행 현황 -->
+    <!-- 02. Agenda -->
     <section>
-      <h2>WBS — 진행 현황</h2>
+      <p class="kicker">Agenda</p>
+      <h2 class="title">목차</h2>
+      <hr class="rule">
+      <table class="report">
+        <tbody>
+          <tr><td class="num">01</td><td>문제 정의 — 약 복용 관리가 어려운 이유</td></tr>
+          <tr><td class="num">02</td><td>비전 &amp; 해결책 — MediMate의 접근 방식</td></tr>
+          <tr><td class="num">03</td><td>진행 현황 — WBS 기준 전체 일정</td></tr>
+          <tr><td class="num">04</td><td>아키텍처 — 시스템 구조</td></tr>
+          <tr><td class="num">05</td><td>사용자 시나리오 — Before / After 비교</td></tr>
+          <tr><td class="num">06</td><td>최종 결과 &amp; 마무리</td></tr>
+        </tbody>
+      </table>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
+    </section>
+
+    <!-- 03. 문제 정의 -->
+    <section>
+      <p class="kicker">Problem</p>
+      <h2 class="title">문제 정의</h2>
+      <p class="lede">약을 처방받고도 제대로 복용하지 못하는 세 가지 이유</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="num">01</div>
+          <h4>입력이 귀찮다</h4>
+          <p>약 이름·용량·복용 시간을 모두 손으로 직접 입력해야 해서, 시작 단계에서부터 진입 장벽이 생긴다.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h4>잊어버린다</h4>
+          <p>바쁜 일상 속에서 정해진 복용 시간을 자주 놓치고, 며칠 지나면 복용 자체를 중단하게 된다.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h4>주의사항을 모른다</h4>
+          <p>약 봉투에 적힌 주의사항·부작용 안내 텍스트를 꼼꼼히 읽지 않아 위험을 인지하지 못한다.</p>
+        </div>
+      </div>
+      <div class="insight">
+        기존 약 복용 관리 앱들의 공통적인 한계 — <b>"초기 설정이 너무 번거로워 결국 아무도 쓰지 않는다"</b>
+      </div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
+    </section>
+
+    <!-- 04. 비전 & 해결책 -->
+    <section>
+      <p class="kicker">Solution</p>
+      <h2 class="title">비전 &amp; 해결책</h2>
+      <p class="quote">"카메라로 <span>찍기만</span> 하면, 나머지는 AI가 알아서 처리한다"</p>
+      <div class="stepper">
+        <div class="step"><div class="dot">01</div><div class="label">사진 촬영</div><div class="desc">약 포장지를<br>카메라로 촬영</div></div>
+        <div class="step"><div class="dot">02</div><div class="label">AI 인식</div><div class="desc">Gemini API가<br>약 정보 추출</div></div>
+        <div class="step"><div class="dot">03</div><div class="label">스케줄 생성</div><div class="desc">복용 일정을<br>자동으로 구성</div></div>
+        <div class="step"><div class="dot">04</div><div class="label">복용 알림</div><div class="desc">정해진 시간에<br>로컬 알림 발송</div></div>
+      </div>
+      <div class="tagrow">
+        <span class="tag accent">Flutter</span>
+        <span class="tag accent">Gemini API</span>
+        <span class="tag">SQLite</span>
+        <span class="tag">로컬 알림</span>
+        <span class="tag">완전 무료 운영</span>
+      </div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
+    </section>
+
+    <!-- 05. WBS -->
+    <section>
+      <p class="kicker">Progress · WBS</p>
+      <h2 class="title">진행 현황</h2>
+      <p class="lede">기획 → 설계 → 구현 → 마무리까지, 계획한 전체 일정과 마일스톤 기준 진행 경과</p>
       <div class="mermaid">
 gantt
   dateFormat YYYY-MM-DD
@@ -115,25 +217,28 @@ gantt
   sqflite DB 초기화      :done, 2026-05-21, 2d
   setup.md 작성          :done, 2026-05-22, 1d
   Hello World 빌드       :done, 2026-05-23, 1d
-  section 구현 1 진행중
-  카메라 스캔 화면       :active, 2026-05-25, 5d
-  AI 인식 결과 화면      :active, 2026-05-28, 4d
-  복용 스케줄 생성       :        2026-06-01, 3d
+  section 구현 1
+  카메라 스캔 화면       :done, 2026-05-25, 5d
+  AI 인식 결과 화면      :done, 2026-05-28, 4d
+  복용 스케줄 생성       :done, 2026-06-01, 3d
   중간발표               :milestone, 2026-06-01, 1d
-  section 구현 2 예정
-  로컬 알림              :        2026-06-08, 3d
-  복용 기록 달력         :        2026-06-10, 3d
-  통계 및 주의사항       :        2026-06-12, 3d
+  section 구현 2
+  로컬 알림              :done, 2026-06-08, 3d
+  복용 기록 달력         :done, 2026-06-10, 3d
+  통계 및 주의사항       :done, 2026-06-12, 3d
   section 마무리
-  APK 빌드 배포          :        2026-06-15, 3d
-  문서 최종 정리         :        2026-06-18, 3d
+  APK 빌드 배포          :done, 2026-06-15, 3d
+  문서 최종 정리         :done, 2026-06-18, 3d
   최종 발표              :milestone, 2026-06-22, 1d
       </div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
 
-    <!-- 5. 아키텍처 -->
+    <!-- 06. 아키텍처 -->
     <section>
-      <h2>아키텍처</h2>
+      <p class="kicker">Architecture</p>
+      <h2 class="title">시스템 구조</h2>
+      <p class="lede">백엔드 서버 없이 동작하는 완전 로컬 구조 — 인터넷 연결은 AI 호출 시점에만 필요</p>
       <div class="mermaid">
 graph LR
   A[사용자] --> B[Flutter UI]
@@ -143,79 +248,65 @@ graph LR
   C --> F[Gemini API]
   D --> G[SQLite]
       </div>
-      <p style="font-size:0.7em; color:#888; margin-top:10px;">
-        백엔드 없음 · 완전 로컬 · 인터넷은 AI 호출 시에만
-      </p>
+      <div class="callout"><b>설계 포인트</b> — 서버 인프라 비용 없이 동작하며, 사용자 데이터는 기기 내부(SQLite)에만 저장되어 개인정보 처리 부담이 적다.</div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
 
-    <!-- 6. 사용자 시나리오 -->
+    <!-- 07. 사용자 시나리오 -->
     <section>
-      <h2>사용자 시나리오</h2>
-      <p style="color:#555; font-size:0.85em; margin-bottom:20px;">병원에서 감기약 3종을 처방받은 직장인</p>
-      <table style="width:100%; font-size:0.8em; border-collapse:collapse;">
-        <tr style="background:#ffebee;">
-          <td style="padding:12px; border:1px solid #ddd; width:50%; vertical-align:top;">
-            <strong style="color:#c62828;">기존 방식</strong><br><br>
-            약 봉투 꺼내서 약 이름 확인<br>
-            → 앱에 약 이름 직접 입력<br>
-            → 용량·복용 시간 다시 입력<br>
-            → 귀찮아서 포기<br>
-            → 첫날 저녁 복용 잊어버림
-          </td>
-          <td style="padding:12px; border:1px solid #ddd; vertical-align:top;">
-            <strong style="color:var(--green);">MediMate</strong><br><br>
-            약 포장 사진 한 장 촬영<br>
-            → AI가 약 정보 자동 인식<br>
-            → 복용 스케줄 자동 생성<br>
-            → 알림 자동 등록<br>
-            → 설정 완료 (30초)
-          </td>
-        </tr>
-      </table>
+      <p class="kicker">Scenario</p>
+      <h2 class="title">사용자 시나리오</h2>
+      <p class="lede">병원에서 감기약 3종을 처방받은 직장인의 첫째 날</p>
+      <div class="compare">
+        <div class="col before">
+          <h4>기존 방식</h4>
+          <ul>
+            <li>약 봉투를 꺼내 약 이름 확인</li>
+            <li>앱에 약 이름을 직접 입력</li>
+            <li>용량·복용 시간을 다시 입력</li>
+            <li>입력이 번거로워 중도 포기</li>
+            <li>결국 첫날 저녁 복용을 잊어버림</li>
+          </ul>
+        </div>
+        <div class="col after">
+          <h4>MediMate 사용 시</h4>
+          <ul>
+            <li>약 포장 사진을 한 장 촬영</li>
+            <li>AI가 약 정보를 자동으로 인식</li>
+            <li>복용 스케줄이 자동으로 생성됨</li>
+            <li>알림이 자동으로 등록됨</li>
+            <li>전체 설정 완료까지 약 30초</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
 
-    <!-- 7. 현재 진행 상황 -->
+    <!-- 08. 최종 결과 -->
     <section>
-      <h2>현재 진행 상황</h2>
-      <table style="width:100%; font-size:0.75em; border-collapse:collapse;">
-        <thead>
-          <tr style="background:var(--green); color:white;">
-            <th style="padding:6px 10px; text-align:left;">항목</th>
-            <th style="padding:6px 10px; width:110px; text-align:center; white-space:nowrap;">상태</th>
-          </tr>
-        </thead>
+      <p class="kicker">Result</p>
+      <h2 class="title">최종 결과 &amp; 마무리</h2>
+      <p class="lede">계획했던 전체 기능 구현과 빌드·문서화까지 완료</p>
+      <table class="report">
+        <thead><tr><th>항목</th><th style="text-align:right;">상태</th></tr></thead>
         <tbody>
-          <tr><td style="padding:6px 10px; border:1px solid #ddd;">Flutter 프로젝트 구조 (presentation / domain / data)</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:var(--green); white-space:nowrap;">✅ 완료</td></tr>
-          <tr style="background:#f9f9f9;"><td style="padding:6px 10px; border:1px solid #ddd;">Gemini API 연동 서비스 (GeminiService)</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:var(--green); white-space:nowrap;">✅ 완료</td></tr>
-          <tr><td style="padding:6px 10px; border:1px solid #ddd;">SQLite DB 초기화 및 데이터 모델 3종</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:var(--green); white-space:nowrap;">✅ 완료</td></tr>
-          <tr style="background:#f9f9f9;"><td style="padding:6px 10px; border:1px solid #ddd;">기본 홈 화면 빌드</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:var(--green); white-space:nowrap;">✅ 완료</td></tr>
-          <tr><td style="padding:6px 10px; border:1px solid #ddd;">카메라 스캔 화면 (F-01)</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:#ff9800; white-space:nowrap;">진행 중</td></tr>
-          <tr style="background:#f9f9f9;"><td style="padding:6px 10px; border:1px solid #ddd;">AI 인식 결과 화면 및 복용 스케줄 생성 (F-02)</td><td style="padding:6px; text-align:center; border:1px solid #ddd; color:#999; white-space:nowrap;">예정</td></tr>
+          <tr><td>Flutter 프로젝트 구조 (presentation / domain / data)</td><td style="text-align:right;"><span class="badge done">완료</span></td></tr>
+          <tr><td>Gemini API 연동 — 약 이미지 인식 &amp; 주의사항 요약</td><td style="text-align:right;"><span class="badge done">완료</span></td></tr>
+          <tr><td>카메라 스캔 → 복용 스케줄 자동 생성 (F-01 / F-02)</td><td style="text-align:right;"><span class="badge done">완료</span></td></tr>
+          <tr><td>로컬 알림 · 복용 기록 달력 · 통계 기능</td><td style="text-align:right;"><span class="badge done">완료</span></td></tr>
+          <tr><td>APK 빌드 &amp; 문서 최종 정리</td><td style="text-align:right;"><span class="badge done">완료</span></td></tr>
         </tbody>
       </table>
+      <div class="callout"><b>한 줄 회고</b> — "촬영 한 번으로 끝나는 경험"이라는 비전을 실제 동작하는 앱으로 구현했고, 서버 비용 없이 완전 무료로 운영 가능한 구조까지 마무리했습니다.</div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
 
-    <!-- 8. 남은 일정 & 우선순위 -->
-    <section>
-      <h2>남은 일정 &amp; 우선순위</h2>
-      <table style="width:100%; font-size:0.82em; border-collapse:collapse;">
-        <thead>
-          <tr style="background:var(--green); color:white;">
-            <th style="padding:8px; text-align:left;">주차</th>
-            <th style="padding:8px; text-align:left;">목표</th>
-            <th style="padding:8px; text-align:left;">우선순위</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="padding:8px; border:1px solid #ddd;">13주차</td><td style="padding:8px; border:1px solid #ddd;">로컬 알림 · 복용 기록 달력 · 통계</td><td style="padding:8px; border:1px solid #ddd; color:#c62828;"><strong>Must</strong></td></tr>
-          <tr style="background:#f9f9f9;"><td style="padding:8px; border:1px solid #ddd;">14주차</td><td style="padding:8px; border:1px solid #ddd;">APK 빌드 · 문서 완비</td><td style="padding:8px; border:1px solid #ddd; color:#f57f17;"><strong>Should</strong></td></tr>
-          <tr><td style="padding:8px; border:1px solid #ddd;">15주차</td><td style="padding:8px; border:1px solid #ddd;">최종 발표</td><td style="padding:8px; border:1px solid #ddd; color:#555;">마감</td></tr>
-        </tbody>
-      </table>
-      <br>
-      <p style="font-size:0.8em; color:var(--green); text-align:left;">
-        피드백 반영 후 우선순위 재조정 예정
-      </p>
+    <!-- 09. Closing -->
+    <section data-background-gradient="linear-gradient(135deg, #0a1825 0%, #0f2942 55%, #0f766e 100%)">
+      <div class="closing">
+        <h1>감사합니다</h1>
+        <p>질문과 피드백 부탁드립니다 &nbsp;|&nbsp; MediMate · 문학철</p>
+      </div>
     </section>
 
   </div>
@@ -223,8 +314,21 @@ graph LR
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
-  mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
-  Reveal.initialize({ hash: true, transition: 'slide', controls: true, progress: true });
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#ccfbf1',
+      primaryTextColor: '#0f2942',
+      primaryBorderColor: '#0f766e',
+      lineColor: '#94a3b8',
+      secondaryColor: '#f0fdfa',
+      tertiaryColor: '#f8fafc',
+      fontFamily: 'Pretendard, Segoe UI, sans-serif'
+    },
+    securityLevel: 'loose'
+  });
+  Reveal.initialize({ hash: true, transition: 'slide', controls: true, progress: true, slideNumber: 'c/t' });
   setTimeout(() => { mermaid.run(); }, 800);
 </script>
 </body>
