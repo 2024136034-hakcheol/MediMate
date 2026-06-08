@@ -10,9 +10,10 @@
 
 | 기능 | 설명 |
 |------|------|
-| 약 스캔 | 카메라로 약 포장 촬영 → AI 자동 인식 |
-| 복용 알림 | 맞춤 시간에 로컬 알림 |
-| 복용 기록 | 날짜별 복용 여부 체크 및 히스토리 |
+| 약 스캔 & 다중 인식 | 카메라/갤러리로 약 포장 촬영 → AI 자동 인식 (사진 한 장에 약이 여러 종류 보이면 각각 인식해 개별 등록) |
+| 복용 스케줄 & 알림 | 인식 결과 기반으로 복용 스케줄 자동 생성, 맞춤 시간에 로컬 알림 |
+| 복용 기록 | 날짜별 복용 여부를 달력 뷰로 확인 및 체크 |
+| 통계 | 최근 7일 복용률, 약별 누적 복용 횟수 차트로 시각화 |
 | 약 정보 | 주의사항·부작용 AI 요약 제공 |
 
 ## 기술 스택
@@ -66,18 +67,13 @@ MediMate/
 │   ├── main.dart
 │   ├── app.dart
 │   ├── presentation/
-│   │   ├── screens/      # UI 화면
-│   │   ├── widgets/      # 공통 위젯
+│   │   ├── screens/      # UI 화면 (스캔/결과/목록/홈/달력/통계/상세/설정 등)
 │   │   └── theme/        # 앱 테마
-│   ├── application/
-│   │   └── view_models/  # 상태 관리
 │   ├── domain/
-│   │   ├── entities/     # Medicine, Schedule, IntakeLog
-│   │   └── services/     # 비즈니스 로직
+│   │   └── entities/     # Medicine, Schedule, IntakeLog
 │   └── data/
-│       ├── api/          # GeminiService
-│       ├── local/        # DbService (SQLite)
-│       └── repositories/
+│       ├── api/          # GeminiService (Gemini Vision 연동, MedicineInfo 모델)
+│       └── local/        # DbService (SQLite CRUD·통계 집계), NotificationService
 ├── docs/
 ├── .planning/
 ├── .env                  # API 키 (gitignore)

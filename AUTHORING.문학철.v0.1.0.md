@@ -85,6 +85,9 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 | JSON 파싱 오류 | API가 JSON 외 텍스트 포함 | 프롬프트에 "JSON만 출력" 명시 |
 | Flutter 패키지 추가 | pubspec.yaml 버전 충돌로 빌드 오류 | 패키지 추가 전 pub.dev에서 최신 호환 버전 확인 |
 | 로컬 알림 설정 | Android 권한 설정 누락으로 알림 미작동 | AndroidManifest.xml 권한 설정 체크리스트 작성 |
+| Gemini 모델 지원 종료 | `gemini-1.5-flash`가 v1 엔드포인트에서 404 오류 발생 | `ListModels` API로 사용 가능한 모델 목록을 직접 조회 → `gemini-2.5-flash`로 교체, curl로 200 응답 재확인 후 코드 반영 |
+| 다중 약 인식 확장 | 사진 한 장에 약이 여러 개 있을 때 단일 JSON 객체로는 정보 손실 발생 | 프롬프트를 JSON 배열 반환으로 바꾸고, `analyzeMedicineImage` 반환 타입을 `List<MedicineInfo>`로 변경. 인식 개수에 따라 ResultScreen(단일)/ScanResultListScreen(다중)으로 분기 처리 |
+| 발표 자료 vs 실제 구현 불일치 | 발표 슬라이드에는 "통계 기능 완료"로 적혀 있었으나 실제 코드에는 미구현 상태였음 | 슬라이드를 고치는 대신 `StatisticsScreen`(fl_chart 기반 주간 복용률·약별 누적 차트)을 실제로 구현해 문서와 코드 상태를 일치시킴 |
 
 ---
 
@@ -93,3 +96,4 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 | 버전 | 날짜 | 변경 내용 |
 |------|------|-----------|
 | v0.1.0 | 2026-05-11 | 초안 작성 |
+| v0.1.1 | 2026-06-08 | 최종 발표 대비 — Gemini 모델 교체·다중 약 인식·통계 기능 관련 LLM Wiki 사례 추가 |

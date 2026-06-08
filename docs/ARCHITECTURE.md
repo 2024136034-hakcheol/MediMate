@@ -13,51 +13,68 @@ MediMate는 백엔드 서버 없이 기기 로컬에서 동작하는 오프라�
 [사용자]
    │
    ▼
-[Flutter UI Layer]
-   ├── ScanScreen       ← 카메라/갤러리로 약 촬영
-   ├── ResultScreen     ← AI 인식 결과 확인·수정
-   ├── HomeScreen       ← 오늘 복용할 약 목록
-   ├── CalendarScreen   ← 복용 기록 달력
-   └── MedDetailScreen  ← 약 정보·주의사항
+[Flutter UI Layer]  (lib/presentation/screens)
+   ├── OnboardingScreen      ← 최초 실행 안내
+   ├── MainScreen            ← 하단 탭 네비게이션 (Home/Calendar/Statistics/Settings)
+   ├── HomeScreen            ← 오늘 복용할 약 목록
+   ├── ScanScreen            ← 카메라/갤러리로 약 포장 촬영
+   ├── ResultScreen          ← AI 인식 결과 확인·수정·저장 (단일 약)
+   ├── ScanResultListScreen  ← 한 사진에서 여러 약이 인식된 경우 목록·개별 등록
+   ├── CalendarScreen        ← 날짜별 복용 기록 달력
+   ├── StatisticsScreen      ← 주간 복용률·약별 누적 복용 통계
+   ├── MedicineDetailScreen  ← 약 정보·주의사항 상세
+   └── SettingsScreen        ← 환경설정
          │
          ▼
-[Service Layer]
-   ├── GeminiService ──────────────► [External API] (네트워크)
-   │                                  └── Gemini API (generativelanguage.googleapis.com)
-   │                                        ├── Vision: 이미지 → 약 정보 추출
-   │                                        └── Text: 주의사항·부작용 요약
+[Data / Service Layer]  (lib/data)
+   ├── GeminiService (api/) ─────────► [External API] (네트워크)
+   │                                     └── Gemini API (generativelanguage.googleapis.com)
+   │                                           └── gemini-2.5-flash (Vision): 이미지 → 약 정보 배열 추출
    │
-   ├── MedicineService ──┐
-   ├── ScheduleService ──┼──────────► [Data Layer] (로컬)
-   └── NotificationService ─────────► ├── sqflite (SQLite DB)
-                                       │     ├── medicines    ← 약 정보
-                                       │     ├── schedules    ← 복용 스케줄
-                                       │     └── intake_logs  ← 복용 기록
-                                       └── flutter_local_notifications
+   ├── DbService (local/) ───────────► [Data Layer] (로컬)
+   │                                     └── sqflite (SQLite DB)
+   │                                           ├── medicines    ← 약 정보
+   │                                           ├── schedules    ← 복용 스케줄
+   │                                           └── intake_logs  ← 복용 기록
+   │
+   └── NotificationService (local/) ─► flutter_local_notifications
 ```
+
+> 별도의 MedicineService/ScheduleService 계층 없이 `DbService`가 약·스케줄·복용 기록의
+> CRUD와 통계 집계 쿼리(`getWeeklyAdherence`, `getMedicineIntakeCounts`)를 함께 담당한다.
+> (구조를 단순하게 유지해 1인 개발 범위에서 유지보수 비용을 낮추기 위한 선택)
 
 ---
 
 ## 3. 데이터 흐름
 
-### 약 스캔 → 스케줄 생성 흐름
+### 약 스캔 → 스케줄 생성 흐름 (다중 약 인식 포함)
 ```
-1. 사용자가 카메라로 약 포장지 촬영
+1. 사용자가 카메라/갤러리에서 약 포장지 사진을 선택
 2. 이미지를 base64로 인코딩
-3. GeminiService → Gemini API 전송
-4. API 응답: { name, dosage, frequency, duration, cautions }
-5. ResultScreen에서 사용자 확인·수정
-6. MedicineService → sqflite에 약 정보 저장
-7. ScheduleService → 복용 시간 계산 → 스케줄 저장
-8. NotificationService → 각 복용 시간에 로컬 알림 등록
+3. GeminiService → Gemini API(gemini-2.5-flash) 전송
+4. API 응답: JSON 배열 [{ name, dosage, frequency, duration_days, timing, cautions }, ...]
+   - 약이 1종이면 항목 1개, 여러 종이면 항목 여러 개로 반환
+5-A. 인식 결과가 1건 → ResultScreen으로 바로 이동, 확인·수정 후 저장
+5-B. 인식 결과가 2건 이상 → ScanResultListScreen에서 항목별로 ResultScreen을 열어
+     하나씩 확인·수정 후 개별 저장 (저장 완료 항목은 체크 표시)
+6. ResultScreen 저장 시 → DbService가 medicines·schedules 테이블에 기록
+7. 복용 횟수(frequency)만큼 시간 분배 → 각 시간에 NotificationService로 로컬 알림 등록
 ```
 
 ### 복용 완료 처리 흐름
 ```
-1. 알림 도착 → 사용자가 "복용 완료" 탭
-2. NotificationService → ScheduleService 호출
-3. intake_logs 테이블에 복용 기록 저장
-4. HomeScreen 갱신
+1. 알림 도착 또는 HomeScreen에서 "복용 완료" 탭
+2. DbService.insertIntakeLog → intake_logs 테이블에 복용 기록 저장 (status='taken')
+3. HomeScreen·CalendarScreen·StatisticsScreen이 최신 기록을 반영해 갱신
+```
+
+### 통계 집계 흐름
+```
+1. StatisticsScreen 진입 시 DbService 호출
+2. getWeeklyAdherence() → 최근 7일간 (예정 복용 횟수 vs 실제 복용 횟수) 집계
+3. getMedicineIntakeCounts() → 약별 누적 복용 횟수를 내림차순 집계
+4. fl_chart(BarChart)와 진행률 위젯으로 시각화
 ```
 
 ---
@@ -106,8 +123,12 @@ CREATE TABLE intake_logs (
 
 ### ADR-02. Gemini API (Vision) 선택
 - **결정:** OCR 라이브러리 대신 Google Gemini API로 약 정보 추출
-- **이유:** 단순 텍스트 추출이 아니라 "1일 3회 식후" 같은 복용법을 의미 단위로 파싱 가능. 주의사항 요약도 동일 API로 처리. **무료 티어 제공 (Gemini 1.5 Flash 기준 하루 1,500회)**
+- **이유:** 단순 텍스트 추출이 아니라 "1일 3회 식후" 같은 복용법을 의미 단위로 파싱 가능. 주의사항 요약도 동일 API로 처리. 무료 티어로 개발·데모에 충분
 - **트레이드오프:** 네트워크 필요, Google 계정 필요
+- **추가 결정 (모델 변경):** 최초 `gemini-1.5-flash`로 개발했으나, 해당 모델이 v1 엔드포인트에서
+  지원 종료(404 `models/gemini-1.5-flash is not found for API version v1`)되어
+  **`gemini-2.5-flash`** 로 교체. 응답 형식도 단일 JSON 객체에서 **JSON 배열**로 변경해
+  사진 한 장에 약이 여러 개 보일 때 각각을 인식하도록 확장 (자세한 내용은 [AGENTS.md](../AGENTS.md) 5절 참고)
 
 ### ADR-03. sqflite (SQLite) 선택
 - **결정:** Firebase Firestore 대신 로컬 SQLite 사용
@@ -129,25 +150,27 @@ lib/
 ├── app.dart
 ├── presentation/
 │   ├── screens/
+│   │   ├── onboarding_screen.dart
+│   │   ├── main_screen.dart            ← 하단 탭 네비게이션
 │   │   ├── home_screen.dart
-│   │   ├── scan_screen.dart       ← 12주차 구현
-│   │   ├── result_screen.dart     ← 12주차 구현
-│   │   └── calendar_screen.dart   ← 13주차 구현
-│   ├── widgets/                   ← 공통 위젯
+│   │   ├── scan_screen.dart
+│   │   ├── result_screen.dart
+│   │   ├── scan_result_list_screen.dart ← 다중 약 인식 결과 목록
+│   │   ├── calendar_screen.dart
+│   │   ├── statistics_screen.dart       ← 복용률·통계 (fl_chart)
+│   │   ├── medicine_detail_screen.dart
+│   │   └── settings_screen.dart
 │   └── theme/
 │       └── app_theme.dart
-├── application/
-│   └── view_models/               ← 상태 관리
 ├── domain/
-│   ├── entities/
-│   │   ├── medicine.dart
-│   │   ├── schedule.dart
-│   │   └── intake_log.dart
-│   └── services/                  ← 비즈니스 로직
+│   └── entities/
+│       ├── medicine.dart
+│       ├── schedule.dart
+│       └── intake_log.dart
 └── data/
     ├── api/
-    │   └── gemini_service.dart
-    ├── local/
-    │   └── db_service.dart
-    └── repositories/
+    │   └── gemini_service.dart    ← Gemini API 연동, MedicineInfo 모델
+    └── local/
+        ├── db_service.dart        ← sqflite CRUD + 통계 집계 쿼리
+        └── notification_service.dart
 ```

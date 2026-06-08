@@ -44,9 +44,10 @@ Flutter 화면을 image_picker 패키지를 사용해서 만들어줘.
 ### Gemini API 프롬프트 설계 (앱 내부)
 ```
 역할: 약 정보 추출 프롬프트 엔지니어링
-목표: 이미지에서 약 이름·용량·복용법·주의사항을 JSON으로 추출
+목표: 이미지에서 약 이름·용량·복용법·주의사항을 JSON 배열로 추출 (다중 약 인식 지원)
 
-사용 모델: gemini-1.5-flash (Vision 지원, 무료 티어)
+사용 모델: gemini-2.5-flash (Vision 지원, v1 엔드포인트)
+※ 최초 gemini-1.5-flash로 개발했으나 v1에서 지원 종료(404)되어 2.5-flash로 교체 (5절 참고)
 ```
 
 ---
@@ -81,24 +82,31 @@ Claude Code에 코드를 요청할 때 항상 PRD의 기능 번호(F-01, F-02...
 
 ## 4. Gemini API 약 인식 프롬프트
 
-앱 내에서 실제로 사용하는 Gemini API 프롬프트:
+앱 내에서 실제로 사용하는 Gemini API 프롬프트 (다중 약 인식 — JSON 배열 반환):
 
 ```
 당신은 약학 전문가입니다.
-첨부된 약 포장지 이미지를 분석하여 아래 JSON 형식으로 정보를 추출하세요.
+첨부된 이미지에 보이는 약을 모두 분석하여 아래 JSON 배열 형식으로 정보를 추출하세요.
+약이 여러 종류 보이면 각각을 배열의 항목으로 추가하고, 한 종류만 보이면 항목을 1개만 담은 배열로 반환하세요.
 이미지에서 확인할 수 없는 항목은 null로 반환하세요.
 
-{
-  "name": "약 이름",
-  "dosage": "1회 복용량 (예: 500mg, 1정)",
-  "frequency": "1일 복용 횟수 (숫자)",
-  "duration_days": "복용 기간 (숫자, 일 단위, 없으면 null)",
-  "timing": "복용 시점 (예: 식후 30분, 취침 전)",
-  "cautions": "주요 주의사항 3줄 이내 요약"
-}
+[
+  {
+    "name": "약 이름",
+    "dosage": "1회 복용량 (예: 500mg, 1정)",
+    "frequency": 1일 복용 횟수 (숫자),
+    "duration_days": 복용 기간 (숫자, 일 단위, 없으면 null),
+    "timing": "복용 시점 (예: 식후 30분, 취침 전)",
+    "cautions": "주요 주의사항 3줄 이내 요약"
+  }
+]
 
-JSON 형식 외 다른 텍스트는 출력하지 마세요.
+JSON 배열 형식 외 다른 텍스트는 출력하지 마세요.
 ```
+
+> 처음에는 단일 JSON 객체를 요구했으나, "사진 한 장에 약이 여러 개면 어떻게 하나"라는
+> 질문에서 출발해 배열 형식으로 바꾸고 `analyzeMedicineImage`의 반환 타입을
+> `Future<MedicineInfo?>` → `Future<List<MedicineInfo>>` 로 확장했다 (`gemini_service.dart`).
 
 ---
 
@@ -109,6 +117,9 @@ JSON 형식 외 다른 텍스트는 출력하지 마세요.
 | 약 포장 이미지 인식 | 배경이 복잡하면 인식률 저하 | 프롬프트에 "배경을 무시하고 약 포장 텍스트만 집중" 추가 |
 | Flutter 코드 생성 | 패키지 버전 불일치로 빌드 오류 | pubspec.yaml을 함께 첨부해서 버전 맞춰달라고 요청 |
 | JSON 파싱 오류 | API가 JSON 외 텍스트 포함 | 프롬프트 끝에 "JSON 외 텍스트 출력 금지" 명시 |
+| Gemini 모델 404 오류 | `models/gemini-1.5-flash is not found for API version v1` — 모델이 v1 엔드포인트에서 지원 종료됨 | Google `ListModels` API로 사용 가능한 모델을 직접 조회해 `gemini-2.5-flash`로 교체 후 curl로 200 응답 확인 |
+| 다중 약 인식 확장 | 사진 한 장에 약이 여러 개 있으면 단일 객체 응답으로는 처리 불가 | 프롬프트를 JSON 배열 반환으로 변경, 인식 결과 개수에 따라 단일 결과는 ResultScreen, 복수 결과는 새 ScanResultListScreen으로 분기 |
+| Windows 데스크탑 카메라 | `image_picker`가 Windows에 cameraDelegate를 제공하지 않아 카메라 촬영 불가 | 데스크탑 데모는 갤러리 선택(`ImageSource.gallery`)으로 진행, 실제 기기에서는 카메라 정상 동작 |
 
 ---
 
