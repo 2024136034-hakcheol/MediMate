@@ -58,6 +58,7 @@
 - [resources/04-risk-checklist.md](resources/04-risk-checklist.md) — 위험 체크리스트
 - [resources/10-demo-checklist.md](resources/10-demo-checklist.md) — 데모 시연 체크리스트
 - [resources/11-qna-prep.md](resources/11-qna-prep.md) — Q&A 대비 질문 모음
+- [resources/12-presentation-script.md](resources/12-presentation-script.md) — 최종 발표 대본 (4분 30초 + 데모 30초)
 
 ## 프로젝트 구조
 
@@ -74,6 +75,7 @@ MediMate/
 │   └── data/
 │       ├── api/          # GeminiService (Gemini Vision 연동, MedicineInfo 모델)
 │       └── local/        # DbService (SQLite CRUD·통계 집계), NotificationService
+├── test/                 # 단위/통합/위젯 테스트
 ├── docs/
 ├── .planning/
 ├── .env                  # API 키 (gitignore)
