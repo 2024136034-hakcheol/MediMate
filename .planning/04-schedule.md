@@ -48,10 +48,13 @@
 
 ### 14주차 — 마감·배포·문서화
 - [x] 버그 수정 및 UI 개선 (Gemini 모델 404 진단·교체 포함)
-- [ ] Android APK 빌드
+- [x] 단위/통합 테스트 작성 (`test/medicine_info_test.dart`, `test/db_service_test.dart`, `test/widget_test.dart`) — `flutter test` 전체 통과
+- [x] `flutter analyze` 통과 (No issues found)
+- [x] 이미지 업로드 압축(`maxWidth/maxHeight 1600`, `imageQuality 80`) 적용 — 성능 최적화
+- [x] Android APK 빌드 (`flutter build apk --release`)
 - [x] README, AGENTS.md, BONUS.md 최종 정리
-- [x] 발표 자료 준비 (`index.html` 최종 발표용 전면 개편)
+- [x] 발표 자료 준비 (`index.html` 최종 발표용 전면 개편) 및 발표 대본 작성
 
 ### 15주차 — 최종 발표
-- [ ] 최종 발표 + Q&A
+- [ ] 최종 발표 + Q&A (2026-06-23 A/B반, 2026-06-29 B반)
 - [ ] 회고 작성

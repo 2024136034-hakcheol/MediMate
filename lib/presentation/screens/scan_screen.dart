@@ -17,9 +17,13 @@ class _ScanScreenState extends State<ScanScreen> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickAndAnalyze(ImageSource source) async {
+    // 최신 스마트폰 카메라(4000px급) 원본을 그대로 전송하면 Gemini 응답이 느려지고
+    // 페이로드도 커지므로, 가로/세로 최대 1600px·품질 80%로 줄여 전송한다.
     final XFile? image = await _picker.pickImage(
       source: source,
       imageQuality: 80,
+      maxWidth: 1600,
+      maxHeight: 1600,
     );
     if (image == null) return;
 

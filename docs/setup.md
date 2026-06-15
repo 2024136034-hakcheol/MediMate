@@ -100,7 +100,51 @@ flutter run -d chrome
 
 ---
 
-## 7. 문제 해결 (FAQ)
+## 7. 테스트 & 코드 품질
+
+### 단위/위젯/통합 테스트 실행
+```bash
+flutter test
+```
+
+| 파일 | 종류 | 내용 |
+|------|------|------|
+| `test/medicine_info_test.dart` | 단위 테스트 | Gemini 응답(`MedicineInfo.fromJson`) 파싱, `Medicine`/`Schedule`/`IntakeLog` `toMap`/`fromMap` 라운드트립 |
+| `test/db_service_test.dart` | 단위/통합 테스트 | `sqflite_common_ffi` 기반 실제 SQLite로 `DbService`의 CRUD·복용 기록·통계 집계(`getWeeklyAdherence`, `getMedicineIntakeCounts`) 검증 |
+| `test/widget_test.dart` | 통합(위젯) 테스트 | 온보딩 페이지 흐름, 메인 화면 하단 탭(홈/복용 기록/통계/설정) 전환까지 앱 전체 흐름 검증 |
+
+### 정적 분석 (코드 품질)
+```bash
+flutter analyze
+```
+`analysis_options.yaml`에서 `flutter_lints` 권장 규칙을 사용하며, 현재 `No issues found!` 상태를 유지한다.
+
+---
+
+## 8. 빌드 & 배포
+
+### Android APK (릴리스 빌드)
+```bash
+flutter build apk --release
+```
+- 결과물 경로: `build/app/outputs/flutter-apk/app-release.apk`
+- 배포: 위 APK 파일을 GitHub Release에 첨부하거나, 기기에 직접 설치(`adb install`)해 시연한다.
+
+### Windows 데스크탑 빌드 (데모용)
+```bash
+flutter build windows
+```
+- 결과물 경로: `build/windows/x64/runner/Release/`
+
+### 배포 단계 요약
+1. `flutter analyze` / `flutter test` 통과 확인
+2. `flutter build apk --release` 로 릴리스 APK 생성
+3. APK를 GitHub Release 또는 로컬 기기에 배포 → 실제 기기에서 카메라 스캔·알림 동작 확인
+4. (데스크탑 시연용) `flutter build windows` 로 발표 시연 환경 준비
+
+---
+
+## 9. 문제 해결 (FAQ)
 
 **Q1. `flutter` 명령어를 찾을 수 없다**
 ```bash

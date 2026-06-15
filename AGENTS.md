@@ -120,6 +120,10 @@ JSON 배열 형식 외 다른 텍스트는 출력하지 마세요.
 | Gemini 모델 404 오류 | `models/gemini-1.5-flash is not found for API version v1` — 모델이 v1 엔드포인트에서 지원 종료됨 | Google `ListModels` API로 사용 가능한 모델을 직접 조회해 `gemini-2.5-flash`로 교체 후 curl로 200 응답 확인 |
 | 다중 약 인식 확장 | 사진 한 장에 약이 여러 개 있으면 단일 객체 응답으로는 처리 불가 | 프롬프트를 JSON 배열 반환으로 변경, 인식 결과 개수에 따라 단일 결과는 ResultScreen, 복수 결과는 새 ScanResultListScreen으로 분기 |
 | Windows 데스크탑 카메라 | `image_picker`가 Windows에 cameraDelegate를 제공하지 않아 카메라 촬영 불가 | 데스크탑 데모는 갤러리 선택(`ImageSource.gallery`)으로 진행, 실제 기기에서는 카메라 정상 동작 |
+| 위젯/통합 테스트 작성 | `sqflite_common_ffi`가 `testWidgets`의 FakeAsync 영역 안에서 10초짜리 내부 동기화 락 Timer를 생성해 "A Timer is still pending even after the widget tree was disposed" assertion 실패 | `tester.runAsync` 대신 `await tester.pump(const Duration(seconds: 15))`로 FakeAsync 시계를 직접 진행시켜 타이머를 소진시킴 → 단위/통합/위젯 테스트 15개 전체 통과 |
+| Android APK 릴리스 빌드 — NDK | `[CXX1101] NDK at .../ndk/28.2.13676358 did not have a source.properties file` — `ndkVersion = flutter.ndkVersion` 설정 때문에 AGP가 NDK를 요구했는데, 이전 다운로드가 1KB짜리 `.installer`만 남기고 중단되어 손상되어 있었음 | 손상된 NDK 캐시 디렉터리를 삭제한 뒤 `flutter build apk --release`를 재실행 → AGP가 NDK를 처음부터 다시 내려받아 해결 |
+| Android APK 릴리스 빌드 — desugaring | `:app:checkReleaseAarMetadata` 실패 — `flutter_local_notifications`가 core library desugaring 활성화를 요구 | `android/app/build.gradle.kts`의 `compileOptions`에 `isCoreLibraryDesugaringEnabled = true` 추가, `dependencies`에 `coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")` 추가 → `app-release.apk`(56.5MB) 빌드 성공 |
+| 이미지 업로드 성능 | 최신 스마트폰 카메라(4000px급) 원본 이미지를 그대로 Gemini API에 전송하면 응답 지연·페이로드 증가 | `image_picker`의 `maxWidth`/`maxHeight`를 1600, `imageQuality`를 80으로 설정해 다운스케일 후 전송 (`scan_screen.dart`) |
 
 ---
 

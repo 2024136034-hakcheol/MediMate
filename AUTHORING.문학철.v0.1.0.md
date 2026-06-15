@@ -88,6 +88,10 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 | Gemini 모델 지원 종료 | `gemini-1.5-flash`가 v1 엔드포인트에서 404 오류 발생 | `ListModels` API로 사용 가능한 모델 목록을 직접 조회 → `gemini-2.5-flash`로 교체, curl로 200 응답 재확인 후 코드 반영 |
 | 다중 약 인식 확장 | 사진 한 장에 약이 여러 개 있을 때 단일 JSON 객체로는 정보 손실 발생 | 프롬프트를 JSON 배열 반환으로 바꾸고, `analyzeMedicineImage` 반환 타입을 `List<MedicineInfo>`로 변경. 인식 개수에 따라 ResultScreen(단일)/ScanResultListScreen(다중)으로 분기 처리 |
 | 발표 자료 vs 실제 구현 불일치 | 발표 슬라이드에는 "통계 기능 완료"로 적혀 있었으나 실제 코드에는 미구현 상태였음 | 슬라이드를 고치는 대신 `StatisticsScreen`(fl_chart 기반 주간 복용률·약별 누적 차트)을 실제로 구현해 문서와 코드 상태를 일치시킴 |
+| 위젯/통합 테스트 작성 | `sqflite_common_ffi`가 `testWidgets`의 FakeAsync 영역 안에서 10초짜리 내부 동기화 락 Timer를 생성해 "A Timer is still pending even after the widget tree was disposed" assertion 실패 | `tester.runAsync` 대신 `await tester.pump(const Duration(seconds: 15))`로 FakeAsync 시계를 직접 진행시켜 타이머를 소진시킴 → 단위/통합/위젯 테스트 15개 전체 통과 |
+| Android APK 릴리스 빌드 — NDK | `[CXX1101] NDK at .../ndk/28.2.13676358 did not have a source.properties file` — `ndkVersion = flutter.ndkVersion` 설정 때문에 AGP가 NDK를 요구했는데, 이전 다운로드가 1KB짜리 `.installer`만 남기고 중단되어 손상되어 있었음 | 손상된 NDK 캐시 디렉터리를 삭제한 뒤 `flutter build apk --release`를 재실행 → AGP가 NDK를 처음부터 다시 내려받아 해결 |
+| Android APK 릴리스 빌드 — desugaring | `:app:checkReleaseAarMetadata` 실패 — `flutter_local_notifications`가 core library desugaring 활성화를 요구 | `android/app/build.gradle.kts`의 `compileOptions`에 `isCoreLibraryDesugaringEnabled = true` 추가, `dependencies`에 `coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")` 추가 → `app-release.apk`(56.5MB) 빌드 성공 |
+| 이미지 업로드 성능 | 최신 스마트폰 카메라(4000px급) 원본 이미지를 그대로 Gemini API에 전송하면 응답 지연·페이로드 증가 | `image_picker`의 `maxWidth`/`maxHeight`를 1600, `imageQuality`를 80으로 설정해 다운스케일 후 전송 (`scan_screen.dart`) |
 
 ---
 
@@ -97,3 +101,4 @@ Claude Code에 코드를 요청할 때 항상 PRD 기능 번호를 기준으로 
 |------|------|-----------|
 | v0.1.0 | 2026-05-11 | 초안 작성 |
 | v0.1.1 | 2026-06-08 | 최종 발표 대비 — Gemini 모델 교체·다중 약 인식·통계 기능 관련 LLM Wiki 사례 추가 |
+| v0.1.2 | 2026-06-15 | 단위/통합 테스트 작성(FakeAsync 타이머 이슈 해결), 이미지 압축 성능 최적화, Android APK 릴리스 빌드(NDK 손상 캐시 복구·core library desugaring 설정) 관련 LLM Wiki 사례 추가 |
