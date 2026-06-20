@@ -102,6 +102,8 @@ flutter run -d chrome
 
 ## 7. 테스트 & 코드 품질
 
+> 커버리지 측정 등 자세한 내용은 [docs/testing.md](testing.md) 참고.
+
 ### 단위/위젯/통합 테스트 실행
 ```bash
 flutter test
@@ -122,6 +124,8 @@ flutter analyze
 ---
 
 ## 8. 빌드 & 배포
+
+> 배포 명령어만 모은 버전은 [docs/deploy.md](deploy.md) 참고.
 
 ### Android APK (릴리스 빌드)
 ```bash

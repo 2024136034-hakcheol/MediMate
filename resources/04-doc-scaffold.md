@@ -11,6 +11,8 @@ MediMate/
 │
 ├── docs/
 │   ├── setup.md                       ✅ 환경 구축 가이드
+│   ├── deploy.md                      ✅ 배포 가이드 (명령어 복붙 가능)
+│   ├── testing.md                     ✅ 테스트 명령 & 커버리지 위치
 │   ├── PRD.md                         ✅ 기획서 & 요구사항
 │   ├── WBS.md                         ✅ WBS & 일정표
 │   ├── ARCHITECTURE.md                ✅ 아키텍처 & ADR
@@ -32,7 +34,9 @@ MediMate/
     ├── 05-bootstrap-prompt.md         ✅ AI 부트스트랩 프롬프트
     ├── 06-llm-wiki-guide.md           ✅ 암묵지 운영 가이드
     ├── 10-demo-checklist.md           ✅ 데모 시연 체크리스트
-    └── 11-qna-prep.md                 ✅ Q&A 대비 질문 모음
+    ├── 11-qna-prep.md                 ✅ Q&A 대비 질문 모음
+    ├── 12-presentation-script.md      ✅ 최종 발표 대본
+    └── 13-security-checklist.md       ✅ 보안 체크리스트
 ```
 
 ## 채점 기준 대조
@@ -42,5 +46,5 @@ MediMate/
 | +1 기획서/요구사항 | PRD.md | ✅ |
 | +2 WBS/일정 | WBS.md, 04-schedule.md | ✅ |
 | +3 아키텍처/ADR | ARCHITECTURE.md, ADR-0001 | ✅ |
-| +4 setup/deploy/testing | setup.md | ✅ |
+| +4 setup/deploy/testing | setup.md, deploy.md, testing.md | ✅ |
 | +5 AGENTS.md/README 완비 | AGENTS.md, README.md | ✅ |

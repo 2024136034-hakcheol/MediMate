@@ -33,6 +33,8 @@
 
 ### docs/
 - [docs/setup.md](docs/setup.md) — 환경 구축 & 실행 가이드
+- [docs/deploy.md](docs/deploy.md) — 배포 가이드 (명령어 복붙 가능)
+- [docs/testing.md](docs/testing.md) — 테스트 명령 & 커버리지 위치
 - [docs/PRD.md](docs/PRD.md) — 기획서 & 요구사항
 - [docs/WBS.md](docs/WBS.md) — WBS & 일정표
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — 아키텍처 & ADR
@@ -59,6 +61,7 @@
 - [resources/10-demo-checklist.md](resources/10-demo-checklist.md) — 데모 시연 체크리스트
 - [resources/11-qna-prep.md](resources/11-qna-prep.md) — Q&A 대비 질문 모음
 - [resources/12-presentation-script.md](resources/12-presentation-script.md) — 최종 발표 대본 (4분 30초 + 데모 30초)
+- [resources/13-security-checklist.md](resources/13-security-checklist.md) — 보안 체크리스트
 
 ## 프로젝트 구조
 
@@ -68,20 +71,57 @@ MediMate/
 │   ├── main.dart
 │   ├── app.dart
 │   ├── presentation/
-│   │   ├── screens/      # UI 화면 (스캔/결과/목록/홈/달력/통계/상세/설정 등)
-│   │   └── theme/        # 앱 테마
+│   │   ├── screens/                          # UI 화면 (스캔/결과/목록/홈/달력/통계/상세/설정 등)
+│   │   └── theme/                            # 앱 테마 (app_theme.dart)
 │   ├── domain/
-│   │   └── entities/     # Medicine, Schedule, IntakeLog
+│   │   └── entities/                         # Medicine, Schedule, IntakeLog
 │   └── data/
-│       ├── api/          # GeminiService (Gemini Vision 연동, MedicineInfo 모델)
-│       └── local/        # DbService (SQLite CRUD·통계 집계), NotificationService
-├── test/                 # 단위/통합/위젯 테스트
+│       ├── api/                               # GeminiService (Gemini Vision 연동, MedicineInfo 모델)
+│       └── local/                             # DbService (SQLite CRUD·통계 집계), NotificationService
+├── test/                                      # 단위/통합/위젯 테스트
+│   ├── medicine_info_test.dart
+│   ├── db_service_test.dart
+│   └── widget_test.dart
+│
 ├── docs/
+│   ├── setup.md                              # 환경 구축 & 실행 가이드
+│   ├── deploy.md                             # 배포 가이드 (명령어 복붙 가능)
+│   ├── testing.md                            # 테스트 명령 & 커버리지 위치
+│   ├── PRD.md                                # 기획서 & 요구사항
+│   ├── WBS.md                                # WBS & 일정표
+│   ├── ARCHITECTURE.md                       # 아키텍처 & ADR
+│   └── qna-log.md                            # Q&A 기록 (발표 후 작성)
+│
 ├── .planning/
-├── .env                  # API 키 (gitignore)
-├── AGENTS.md
-├── BONUS.md
-└── README.md
+│   ├── 00-vision.md                          # 비전·목표
+│   ├── 01-requirements.md                    # 요구사항
+│   ├── 02-wbs.md                             # WBS & 위험 식별
+│   ├── 04-schedule.md                        # 6주 일정
+│   └── decisions/
+│       └── ADR-0001-mobile-framework.md      # ADR: Flutter 선택
+│
+├── resources/
+│   ├── 01-team-policy.md                     # 팀 구성 가이드
+│   ├── 01-planning-workflow.md               # 기획 워크플로우 상세
+│   ├── 02-evaluation-rubric.md               # 평가표 전문
+│   ├── 02-wbs-template.md                    # WBS 템플릿
+│   ├── 03-bonus-points.md                    # 가산점 상세
+│   ├── 03-adr-template.md                    # ADR 템플릿
+│   ├── 04-doc-scaffold.md                    # 문서 스캐폴드 트리
+│   ├── 04-risk-checklist.md                  # 위험 체크리스트
+│   ├── 05-bootstrap-prompt.md                # AI 부트스트랩 프롬프트
+│   ├── 06-llm-wiki-guide.md                  # 암묵지 운영 가이드
+│   ├── 10-demo-checklist.md                  # 데모 시연 체크리스트
+│   ├── 11-qna-prep.md                        # Q&A 대비 질문 모음
+│   ├── 12-presentation-script.md             # 최종 발표 대본 (4분 30초 + 데모 30초)
+│   └── 13-security-checklist.md              # 보안 체크리스트
+│
+├── index.html                                # 최종 발표 슬라이드 (reveal.js)
+├── .env                                       # API 키 (gitignore, 커밋되지 않음)
+├── AGENTS.md                                 # AI Agent 운영 가이드
+├── BONUS.md                                  # 가산점 트래킹
+├── AUTHORING.문학철.v0.1.0.md                 # 개인 AI 활용 기법
+└── README.md                                 # 이 파일
 ```
 
 ## 팀
