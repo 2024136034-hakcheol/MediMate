@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../data/api/gemini_service.dart';
 import 'result_screen.dart';
 
-const _green = Color(0xFF2e7d32);
-const _lightGreen = Color(0xFF4CAF50);
+const _green = Color(0xFF0f766e);
+const _lightGreen = Color(0xFF0d9488);
 
 class ScanResultListScreen extends StatefulWidget {
   final List<MedicineInfo> medicines;

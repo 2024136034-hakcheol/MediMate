@@ -29,7 +29,7 @@ class _MedicineDetailScreenState extends State<MedicineDetailScreen> {
       backgroundColor: const Color(0xFFF4F7F4),
       appBar: AppBar(
         title: Text(m.name),
-        backgroundColor: const Color(0xFF2e7d32),
+        backgroundColor: const Color(0xFF0f766e),
         foregroundColor: Colors.white,
       ),
       body: ListView(
@@ -44,7 +44,7 @@ class _MedicineDetailScreenState extends State<MedicineDetailScreen> {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: const Color(0xFF2e7d32),
+                      backgroundColor: const Color(0xFF0f766e),
                       child: Text(m.name[0].toUpperCase(),
                           style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                     ),
@@ -77,7 +77,7 @@ class _MedicineDetailScreenState extends State<MedicineDetailScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       child: Row(
                         children: [
-                          const Icon(Icons.access_time, color: Color(0xFF2e7d32), size: 18),
+                          const Icon(Icons.access_time, color: Color(0xFF0f766e), size: 18),
                           const SizedBox(width: 8),
                           Text(s.time, style: const TextStyle(fontWeight: FontWeight.bold)),
                           const SizedBox(width: 8),

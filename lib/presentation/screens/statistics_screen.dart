@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../data/local/db_service.dart';
 
-const _green = Color(0xFF2e7d32);
-const _lightGreen = Color(0xFF4CAF50);
+const _green = Color(0xFF0f766e);
+const _lightGreen = Color(0xFF0d9488);
 const _bg = Color(0xFFF4F7F4);
 
 const _weekdayLabels = ['월', '화', '수', '목', '금', '토', '일'];
@@ -240,7 +240,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           child: LinearProgressIndicator(
                             value: ratio,
                             minHeight: 10,
-                            backgroundColor: const Color(0xFFe8f5e9),
+                            backgroundColor: const Color(0xFFf0fdfa),
                             valueColor: const AlwaysStoppedAnimation(_lightGreen),
                           ),
                         ),

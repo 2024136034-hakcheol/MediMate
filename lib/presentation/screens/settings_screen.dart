@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF4F7F4),
       appBar: AppBar(
         title: const Text('설정'),
-        backgroundColor: const Color(0xFF2e7d32),
+        backgroundColor: const Color(0xFF0f766e),
         foregroundColor: Colors.white,
       ),
       body: ListView(
@@ -85,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
-        leading: Icon(icon, color: danger ? Colors.redAccent : const Color(0xFF2e7d32)),
+        leading: Icon(icon, color: danger ? Colors.redAccent : const Color(0xFF0f766e)),
         title: Text(title, style: TextStyle(color: danger ? Colors.redAccent : Colors.black)),
         subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 18),
@@ -119,7 +119,7 @@ class SettingsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Row(
                             children: [
-                              const Icon(Icons.alarm, size: 16, color: Color(0xFF4CAF50)),
+                              const Icon(Icons.alarm, size: 16, color: Color(0xFF0d9488)),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
@@ -176,7 +176,7 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       applicationName: 'MediMate',
       applicationVersion: 'v1.0.0',
-      applicationIcon: const Icon(Icons.medication, color: Color(0xFF2e7d32), size: 40),
+      applicationIcon: const Icon(Icons.medication, color: Color(0xFF0f766e), size: 40),
       children: const [
         SizedBox(height: 8),
         Text('AI 약 복용 관리 앱\n카메라로 약을 찍으면 AI가 복용 스케줄을 자동으로 만들어 줍니다.'),

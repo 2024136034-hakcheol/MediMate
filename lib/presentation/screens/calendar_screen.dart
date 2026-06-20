@@ -45,7 +45,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       backgroundColor: const Color(0xFFF4F7F4),
       appBar: AppBar(
         title: const Text('복용 기록'),
-        backgroundColor: const Color(0xFF2e7d32),
+        backgroundColor: const Color(0xFF0f766e),
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -73,10 +73,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   color: Color(0xFFa5d6a7), shape: BoxShape.circle,
                 ),
                 selectedDecoration: const BoxDecoration(
-                  color: Color(0xFF2e7d32), shape: BoxShape.circle,
+                  color: Color(0xFF0f766e), shape: BoxShape.circle,
                 ),
                 markerDecoration: const BoxDecoration(
-                  color: Color(0xFF4CAF50), shape: BoxShape.circle,
+                  color: Color(0xFF0d9488), shape: BoxShape.circle,
                 ),
                 outsideDaysVisible: false,
               ),
@@ -87,7 +87,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       bottom: 4,
                       child: Container(
                         width: 6, height: 6,
-                        decoration: const BoxDecoration(color: Color(0xFF4CAF50), shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: Color(0xFF0d9488), shape: BoxShape.circle),
                       ),
                     );
                   }
@@ -128,7 +128,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.check_circle, color: Color(0xFF4CAF50)),
+                            const Icon(Icons.check_circle, color: Color(0xFF0d9488)),
                             const SizedBox(width: 10),
                             Text(
                               log.takenAt.substring(11, 16),

@@ -72,7 +72,7 @@ class _ScanScreenState extends State<ScanScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: Color(0xFF2e7d32)),
+                  CircularProgressIndicator(color: Color(0xFF0f766e)),
                   SizedBox(height: 20),
                   Text('AI가 약 정보를 분석 중...', style: TextStyle(fontSize: 16)),
                   SizedBox(height: 8),
@@ -86,7 +86,7 @@ class _ScanScreenState extends State<ScanScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.medication, size: 80, color: Color(0xFF4CAF50)),
+                  const Icon(Icons.medication, size: 80, color: Color(0xFF0d9488)),
                   const SizedBox(height: 24),
                   const Text(
                     '약 포장지를 촬영하거나\n갤러리에서 사진을 선택하세요',
@@ -99,7 +99,7 @@ class _ScanScreenState extends State<ScanScreen> {
                     icon: const Icon(Icons.camera_alt),
                     label: const Text('카메라로 촬영'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2e7d32),
+                      backgroundColor: const Color(0xFF0f766e),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       textStyle: const TextStyle(fontSize: 16),
@@ -111,8 +111,8 @@ class _ScanScreenState extends State<ScanScreen> {
                     icon: const Icon(Icons.photo_library),
                     label: const Text('갤러리에서 선택'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF2e7d32),
-                      side: const BorderSide(color: Color(0xFF2e7d32)),
+                      foregroundColor: const Color(0xFF0f766e),
+                      side: const BorderSide(color: Color(0xFF0f766e)),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       textStyle: const TextStyle(fontSize: 16),
                     ),

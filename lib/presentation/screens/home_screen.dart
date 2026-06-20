@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/local/db_service.dart';
 import '../../domain/entities/medicine.dart';
+import '../theme/app_theme.dart';
 import 'scan_screen.dart';
 import 'medicine_detail_screen.dart';
 
@@ -64,97 +65,163 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final takenCount = _todaySchedules.where((s) => s['log_id'] != null).length;
+    final totalCount = _todaySchedules.length;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F4),
-      appBar: AppBar(
-        title: const Row(
-          children: [
-            Icon(Icons.medication, color: Colors.white, size: 22),
-            SizedBox(width: 8),
-            Text('MediMate', style: TextStyle(fontWeight: FontWeight.bold)),
+      body: RefreshIndicator(
+        onRefresh: _load,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: _header(takenCount, totalCount)),
+            if (_isLoading)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    _sectionLabel('오늘의 복용'),
+                    const SizedBox(height: 10),
+                    if (_todaySchedules.isEmpty)
+                      _emptyCard(Icons.medication_outlined, '오늘 복용할 약이 없습니다')
+                    else
+                      ..._todaySchedules.map((s) => _scheduleCard(s)),
+                    const SizedBox(height: 28),
+                    _sectionLabel('등록된 약 ${_medicines.length}종'),
+                    const SizedBox(height: 10),
+                    if (_medicines.isEmpty)
+                      _emptyCard(Icons.add_a_photo_outlined, '등록된 약이 없습니다\n아래 버튼으로 스캔하세요')
+                    else
+                      ..._medicines.map((m) => _medicineCard(m)),
+                  ]),
+                ),
+              ),
           ],
         ),
-        backgroundColor: const Color(0xFF2e7d32),
-        foregroundColor: Colors.white,
-        elevation: 0,
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF2e7d32)))
-          : RefreshIndicator(
-              color: const Color(0xFF2e7d32),
-              onRefresh: _load,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _todaySection(),
-                  const SizedBox(height: 20),
-                  _medicinesSection(),
-                ],
-              ),
-            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(context, MaterialPageRoute(builder: (_) => const ScanScreen()));
           _load();
         },
-        backgroundColor: const Color(0xFF2e7d32),
-        foregroundColor: Colors.white,
-        icon: const Icon(Icons.camera_alt),
-        label: const Text('약 스캔', style: TextStyle(fontWeight: FontWeight.bold)),
+        icon: const Icon(Icons.camera_alt_rounded),
+        label: const Text('약 스캔'),
       ),
     );
   }
 
-  Widget _todaySection() {
+  Widget _header(int taken, int total) {
     final now = DateTime.now();
-    final dateStr = '${now.month}월 ${now.day}일 오늘의 복용';
+    final progress = total == 0 ? 0.0 : taken / total;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(dateStr, style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
-        if (_todaySchedules.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(14),
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 16, 20, 28),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.navy, AppColors.tealDeep],
+        ),
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(28), bottomRight: Radius.circular(28)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.medication_rounded, color: Colors.white, size: 18),
+              ),
+              const SizedBox(width: 10),
+              const Text('MediMate', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            '${now.month}월 ${now.day}일 오늘의 복용',
+            style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 13, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text('$taken', style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w800)),
+              Text(' / $total건 완료', style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 15, fontWeight: FontWeight.w600)),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 8,
+              backgroundColor: Colors.white.withValues(alpha: 0.15),
+              valueColor: const AlwaysStoppedAnimation(Color(0xFF5EEAD4)),
             ),
-            child: const Center(
-              child: Text('오늘 복용할 약이 없습니다', style: TextStyle(color: Colors.grey)),
-            ),
-          )
-        else
-          ...(_todaySchedules.map((s) => _scheduleCard(s))),
-      ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionLabel(String text) => Text(
+        text,
+        style: const TextStyle(fontSize: 13, color: AppColors.muted, fontWeight: FontWeight.w700, letterSpacing: 0.2),
+      );
+
+  Widget _emptyCard(IconData icon, String text) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.line),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 36, color: AppColors.muted.withValues(alpha: 0.5)),
+          const SizedBox(height: 12),
+          Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+        ],
+      ),
     );
   }
 
   Widget _scheduleCard(Map<String, dynamic> s) {
     final taken = s['log_id'] != null;
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: taken ? const Color(0xFFe8f5e9) : Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: taken ? const Color(0xFF4CAF50) : Colors.grey.shade200),
+        color: taken ? AppColors.tealSoft : Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: taken ? const Color(0xFF99F6E4) : AppColors.line),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: taken ? const Color(0xFF4CAF50) : const Color(0xFFeeeeee),
+              color: taken ? AppColors.teal : const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               s['schedule_time'] as String,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 fontSize: 13,
-                color: taken ? Colors.white : Colors.black54,
+                color: taken ? Colors.white : AppColors.muted,
               ),
             ),
           ),
@@ -164,10 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(s['medicine_name'] as String,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.ink)),
                 if (s['medicine_dosage'] != null)
                   Text(s['medicine_dosage'] as String,
-                      style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                      style: const TextStyle(color: AppColors.muted, fontSize: 12)),
               ],
             ),
           ),
@@ -175,9 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: () => _markTaken(s['schedule_id'] as int),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2e7d32),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 textStyle: const TextStyle(fontSize: 12),
@@ -185,33 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Text('복용 완료'),
             )
           else
-            const Icon(Icons.check_circle, color: Color(0xFF4CAF50), size: 28),
+            const Icon(Icons.check_circle_rounded, color: AppColors.teal, size: 28),
         ],
       ),
-    );
-  }
-
-  Widget _medicinesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '등록된 약 ${_medicines.length}종',
-          style: const TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 8),
-        if (_medicines.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
-            child: const Center(
-              child: Text('등록된 약이 없습니다\n아래 버튼으로 스캔하세요',
-                  textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
-            ),
-          )
-        else
-          ...(_medicines.map((m) => _medicineCard(m))),
-      ],
     );
   }
 
@@ -221,7 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2))],
+        border: Border.all(color: AppColors.line),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: ListTile(
         onTap: () => Navigator.push(
@@ -229,14 +271,19 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(builder: (_) => MedicineDetailScreen(medicine: m)),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        leading: CircleAvatar(
-          radius: 22,
-          backgroundColor: const Color(0xFF2e7d32),
+        leading: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(colors: [AppColors.navy, AppColors.tealDeep]),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          alignment: Alignment.center,
           child: Text(m.name[0].toUpperCase(),
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
         ),
-        title: Text(m.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(m.dosage ?? '용량 정보 없음', style: const TextStyle(color: Colors.grey)),
+        title: Text(m.name, style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.ink)),
+        subtitle: Text(m.dosage ?? '용량 정보 없음', style: const TextStyle(color: AppColors.muted)),
         trailing: IconButton(
           icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
           onPressed: () => _confirmDelete(m),

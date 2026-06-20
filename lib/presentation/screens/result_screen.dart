@@ -139,7 +139,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 borderRadius: BorderRadius.circular(8),
                 side: const BorderSide(color: Colors.grey),
               ),
-              leading: const Icon(Icons.access_time, color: Color(0xFF2e7d32)),
+              leading: const Icon(Icons.access_time, color: Color(0xFF0f766e)),
               title: Text(
                   '${_scheduleTime.format(context)}  (1일 ${widget.medicineInfo.frequency ?? 1}회)'),
               trailing: const Icon(Icons.chevron_right),
@@ -157,7 +157,7 @@ class _ResultScreenState extends State<ResultScreen> {
               child: ElevatedButton(
                 onPressed: _isSaving ? null : _save,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2e7d32),
+                  backgroundColor: const Color(0xFF0f766e),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   textStyle: const TextStyle(fontSize: 16),
