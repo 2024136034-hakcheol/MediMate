@@ -1,6 +1,9 @@
 # 환경변수 (API 키 등 — 절대 커밋하지 말 것)
 .env
 
+# 개인 발표 대본 (한글 변환용, 저장소에는 올리지 않음)
+docs/presentation-script.md
+
 # Miscellaneous
 *.class
 *.log
