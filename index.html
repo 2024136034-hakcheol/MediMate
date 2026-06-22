@@ -140,7 +140,7 @@
           <tr><td class="num">02</td><td>비전 &amp; 해결책 — MediMate의 접근 방식</td></tr>
           <tr><td class="num">03</td><td>사용 방법 — 앱 사용 흐름 5단계</td></tr>
           <tr><td class="num">04</td><td>진행 현황 — WBS 기준 전체 일정</td></tr>
-          <tr><td class="num">05</td><td>아키텍처 — 시스템 구조</td></tr>
+          <tr><td class="num">05</td><td>아키텍처 — 시스템 구조 &amp; ADR</td></tr>
           <tr><td class="num">06</td><td>사용자 시나리오 — Before / After 비교</td></tr>
           <tr><td class="num">07</td><td>AI Agent 활용 &amp; 가산점</td></tr>
           <tr><td class="num">08</td><td>최종 결과 &amp; 마무리</td></tr>
@@ -270,6 +270,24 @@ graph LR
   D --> G[SQLite]
       </div>
       <div class="callout"><b>설계 포인트</b> — 서버 인프라 비용 없이 동작하며, 사용자 데이터는 기기 내부(SQLite)에만 저장되어 개인정보 처리 부담이 적다.</div>
+      <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
+    </section>
+
+    <!-- 06b. ADR -->
+    <section>
+      <p class="kicker">Architecture · ADR</p>
+      <h2 class="title">주요 기술 결정 (ADR)</h2>
+      <p class="lede">왜 이 기술을 선택했는지 — Architecture Decision Record</p>
+      <table class="report">
+        <thead><tr><th>결정</th><th>이유</th><th>트레이드오프</th></tr></thead>
+        <tbody>
+          <tr><td><b>Flutter</b><br>(vs React Native)</td><td>Dart 강타입, 카메라 플러그인 생태계, 단일 코드베이스</td><td>Dart 학습 비용</td></tr>
+          <tr><td><b>Gemini API</b><br>(vs OCR 라이브러리)</td><td>복용법까지 의미 단위로 파싱, 주의사항 요약 동시 처리, 무료 티어로 충분</td><td>네트워크·Google 계정 필요</td></tr>
+          <tr><td><b>sqflite (SQLite)</b><br>(vs Firebase Firestore)</td><td>완전 오프라인, 건강 데이터 외부 미전송, 설정 단순</td><td>기기 간 동기화 불가</td></tr>
+          <tr><td><b>flutter_local_notifications</b><br>(vs FCM)</td><td>서버 없이 동작, 오프라인에서도 알림 보장</td><td>앱 삭제 시 알림 데이터 소실</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><b>자세히</b> — 전체 ADR 4건과 트레이드오프 상세는 <b>docs/ARCHITECTURE.md</b> 5절 참고.</div>
       <div class="foot">MediMate · 최종 발표 · <b>문학철</b></div>
     </section>
 
